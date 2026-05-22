@@ -453,7 +453,7 @@
   /* Patient avatar */
   .patient-avatar {
     color: #fff;
-    background: linear-gradient(135deg, #0088a5, #00808f, #00787d);
+    background: oklch(68% .10 230);
     border-radius: 10px; flex-shrink: 0;
     justify-content: center; align-items: center;
     font-size: 11px; font-weight: 600; display: flex;
@@ -1932,9 +1932,10 @@ Ki-67 Proliferation Index: 22%</div>
     for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffffffff;
     return ((h >>> 0) % 360);
   }
-  function avatarStyle(name) {
+  function applyAvatarColor(el, name) {
     const hue = hashColor(name);
-    return `background: oklch(62% .18 ${hue}); color: #fff;`;
+    el.style.background = `oklch(68% .14 ${hue})`;
+    el.style.color = '#fff';
   }
 
   // ── Onboarding tip (feature 9) ────────────────────
@@ -2258,7 +2259,7 @@ Ki-67 Proliferation Index: 22%</div>
     // Feature 1: unique avatar colors per patient
     document.querySelectorAll('.patient-avatar').forEach(av => {
       const name = av.closest('[data-initials]')?.dataset.initials || av.textContent.trim();
-      if (name) av.style.cssText += avatarStyle(name);
+      if (name) applyAvatarColor(av, name);
     });
 
     // Feature 9: hide tip if already dismissed
