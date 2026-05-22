@@ -103,7 +103,7 @@
   ══════════════════════════════════════════════════════ */
   .sidebar {
     width: var(--sidebar-w);
-    background: linear-gradient(175deg, oklch(16% .055 240) 0%, oklch(14.5% .052 240) 100%);
+    background: oklch(15% .035 240);
     border: 1px solid rgba(255,255,255,.07);
     border-radius: var(--r);
     flex-direction: column;
@@ -132,7 +132,7 @@
     height: 28px;
     width: 106px; /* 28 × 727/192 */
     flex-shrink: 0;
-    background: linear-gradient(90deg, #00c4a8 0%, #2b80ff 100%);
+    background: rgba(255,255,255,.78);
     -webkit-mask: url(logo.svg) no-repeat center / contain;
     mask: url(logo.svg) no-repeat center / contain;
   }
@@ -140,7 +140,7 @@
   .sidebar-logo-collapsed {
     display: none;
     width: 28px; height: 28px; flex-shrink: 0;
-    background: linear-gradient(135deg, #00c4a8 0%, #2b80ff 100%);
+    background: oklch(42% .16 252);
     border-radius: 8px;
     align-items: center; justify-content: center;
     color: #fff; font-family: var(--ff); font-size: 13px; font-weight: 700;
@@ -151,7 +151,7 @@
   .sidebar-new-search { flex-shrink: 0; padding: 8px 10px 4px }
   .sidebar.collapsed .sidebar-new-search { justify-content: center; padding: 8px 0 4px; display: flex }
   .sidebar-new-search-btn {
-    background: linear-gradient(130deg, var(--cyan-600) 0%, oklch(48% .24 262) 100%);
+    background: var(--cyan-600);
     box-shadow: 0 1px 4px rgba(0,0,0,.2);
     color: #fff; cursor: pointer;
     white-space: nowrap;
@@ -224,7 +224,7 @@
   }
   .sidebar-footer-avatar {
     color: #fff;
-    background: linear-gradient(135deg, #2b80ff 0%, #00c4a8 100%);
+    background: oklch(42% .16 252);
     border-radius: 8px; flex-shrink: 0;
     justify-content: center; align-items: center;
     width: 30px; height: 30px;
@@ -366,7 +366,8 @@
   .status-pill.running   .status-dot { background: oklch(55% .22 252); animation: 1.6s ease-in-out infinite status-pulse }
   .status-pill.succeeded .status-dot { background: var(--ok) }
   .status-pill.failed    .status-dot { background: var(--bad) }
-  .status-pill.cancelled .status-dot { background: var(--text-3) }
+  .status-pill.cancelled  .status-dot { background: var(--text-3) }
+  .status-pill.no-results .status-dot { background: var(--text-3) }
   @keyframes status-pulse {
     0%,to { opacity:1; transform:scale(1) }
     50%   { opacity:.4; transform:scale(.82) }
@@ -815,7 +816,7 @@
 
   /* ── Brand gradient ── */
   :root { --brand-gradient: linear-gradient(135deg, #2b80ff 0%, #00c4a8 100%) }
-  .patient-avatar { background: linear-gradient(135deg, #2b80ff 0%, #00c4a8 100%) !important }
+  .patient-avatar { background: oklch(42% .16 252) !important }
 
   /* ── Sidebar label opacity on collapse ── */
   .sidebar-nav-label, .sidebar-new-search-label, .sidebar-new-search-kbd,
@@ -997,13 +998,6 @@
       </button>
     </nav>
 
-    <div class="sidebar-pre-footer">
-      <div class="sidebar-nav-item" style="cursor:not-allowed" title="Coming soon — multi-tenancy">
-        <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span class="sidebar-nav-label">Org Admin</span>
-        <span class="sidebar-nav-item-count" style="font-size:9px;padding:1px 5px;letter-spacing:.04em">SOON</span>
-      </div>
-    </div>
 
     <div class="sidebar-footer">
       <div class="sidebar-footer-avatar">C</div>
