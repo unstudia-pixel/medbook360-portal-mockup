@@ -2260,11 +2260,13 @@ Ki-67 Proliferation Index: 22%</div>
       });
     });
 
-    // Feature 1: unique avatar colors per patient
+    // Feature 1: unique avatar colors per patient + sidebar footer
     document.querySelectorAll('.patient-avatar').forEach(av => {
       const name = av.closest('[data-initials]')?.dataset.initials || av.textContent.trim();
       if (name) applyAvatarColor(av, name);
     });
+    const footerAv = document.querySelector('.sidebar-footer-avatar');
+    if (footerAv) applyAvatarColor(footerAv, footerAv.textContent.trim());
 
     // Feature 9: hide tip if already dismissed
     if (localStorage.getItem('mb360-tip-dismissed')) {
