@@ -347,8 +347,8 @@
   .list-item:has(.status-pill.failed)     { border-left-color: var(--bad) }
   .list-item:has(.status-pill.no-results) { border-left-color: var(--border) }
   .list-item:hover { background: var(--bg-hover) }
-  .list-item.selected { background: oklch(95% .06 252) }
-  .list-item.selected .list-item-name { color: oklch(42% .22 252) }
+  .list-item.selected { background: oklch(96% .004 230) }
+  .list-item.selected .list-item-name { color: var(--text) }
   .list-item-body { flex: 1; min-width: 0 }
   .list-item-name {
     color: var(--text); white-space: nowrap;
@@ -914,9 +914,10 @@
   .patient-saved-banner button:hover { background: oklch(55% .22 252 / .18); color: var(--cyan-700) }
 
   /* ── View toggle (tabs/timeline) ── */
-  .view-toggle { display:flex; background:var(--bg-app); border:1px solid var(--border); border-radius:6px; padding:2px; gap:2px }
-  .view-toggle-btn { border:none; background:none; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:600; color:var(--text-3); cursor:pointer; font-family:var(--ff); transition:all .12s }
-  .view-toggle-btn.active { background:var(--bg-surface); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,.08) }
+  .view-toggle { display:flex; background:var(--bg-app); border:1px solid var(--border); border-radius:99px; padding:3px; gap:2px }
+  .view-toggle-btn { border:none; background:none; border-radius:99px; padding:3px 11px; font-size:11.5px; font-weight:500; color:var(--text-3); cursor:pointer; font-family:var(--ff); transition:color .12s, background .12s, box-shadow .12s }
+  .view-toggle-btn:hover { color:var(--text-2) }
+  .view-toggle-btn.active { background:var(--bg-surface); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,.10), 0 0 0 1px var(--border) }
 
   /* ── Timeline ── */
   .timeline { padding: 12px 14px }
