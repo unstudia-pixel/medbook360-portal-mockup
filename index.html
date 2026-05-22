@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedBook360 — Redesign Mockup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  /* ══════════════════════════════════════════════════════
+     EXACT DESIGN TOKENS — extracted from deployed bundle
+  ══════════════════════════════════════════════════════ */
+  :root {
+    --bg-app:              oklch(96% .005 230);
+    --bg-surface:          #fff;
+    --bg-surface-secondary:oklch(98.5% .004 230);
+    --bg-hover:            oklch(96% .008 230);
+    --bg-selected:         oklch(96% .025 220);
+    --border:              oklch(91% .008 230);
+
+    --navy-900: #0f172a;
+    --navy-800: #1e293b;   /* sidebar */
+    --navy-700: #334155;
+
+    --cyan-600: oklch(58% .12 220); /* ≈ #0088a5 */
+    --cyan-700: oklch(52% .12 220); /* hover state  */
+
+    --text:   #0e1a2c;
+    --text-2: #4a5a72;
+    --text-3: #7c8aa0;
+
+    --ok:   oklch(58% .13 155);   /* green  */
+    --warn: oklch(70% .14 75);    /* amber  */
+    --bad:  oklch(58% .18 25);    /* red    */
+
+    --sidebar-w:          232px;
+    --sidebar-w-collapsed: 60px;
+    --list-card:           280px;
+    --margin:              10px;
+    --gap:                 10px;
+    --r:                   14px;  /* card radius */
+
+    --ff: 'Geist', system-ui, sans-serif;
+    --fm: 'Geist Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+  html, body {
+    color: var(--text);
+    background: var(--bg-app);
+    font-family: var(--ff);
+    font-size: 13px;
+    line-height: 1.5;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+  #root { height: 100vh }
+
+  /* ══════════════════════════════════════════════════════
+     APP SHELL — floating cards layout
+  ══════════════════════════════════════════════════════ */
+  .app-shell {
+    background: var(--bg-app);
+    height: 100vh;
+    padding: var(--margin);
+    gap: var(--gap);
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     SIDEBAR
+  ══════════════════════════════════════════════════════ */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--navy-800);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: var(--r);
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100%;
+    transition: width .2s ease-out;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.12);
+  }
+  .sidebar.collapsed { width: var(--sidebar-w-collapsed) }
+
+  /* Logo */
+  .sidebar-logo {
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    flex-shrink: 0;
+    align-items: center;
+    gap: 10px;
+    height: 54px;
+    padding: 0 16px;
+    display: flex;
+    overflow: hidden;
+  }
+  .sidebar-logo-mark {
+    width: 28px; height: 28px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sidebar-logo-mark svg { color: var(--cyan-600) }
+  .sidebar-logo-text {
+    color: #fff;
+    white-space: nowrap;
+    font-size: 15px; font-weight: 600;
+    overflow: hidden;
+  }
+
+  /* New Search CTA */
+  .sidebar-new-search { flex-shrink: 0; padding: 8px 10px 4px }
+  .sidebar.collapsed .sidebar-new-search { justify-content: center; padding: 8px 0 4px; display: flex }
+  .sidebar-new-search-btn {
+    background: var(--cyan-600);
+    color: #fff; cursor: pointer;
+    white-space: nowrap;
+    border: none; border-radius: 8px;
+    justify-content: flex-start; align-items: center; gap: 7px;
+    width: 100%; height: 34px; padding: 0 10px;
+    font-family: var(--ff); font-size: 13px; font-weight: 600;
+    transition: background .12s ease-out;
+    display: flex; overflow: hidden;
+  }
+  .sidebar.collapsed .sidebar-new-search-btn { justify-content: center; width: 34px; padding: 0 }
+  .sidebar-new-search-btn:hover { background: var(--cyan-700) }
+  .sidebar-new-search-label { flex: none }
+  .sidebar-new-search-spacer { flex: 1 }
+  .sidebar-new-search-kbd {
+    color: rgba(255,255,255,.45);
+    background: none; border: none; flex-shrink: 0; padding: 0;
+    font-family: var(--fm); font-size: 11px; font-weight: 500;
+  }
+
+  /* Nav */
+  .sidebar-nav {
+    flex-direction: column; flex: 1;
+    gap: 2px; padding: 4px 10px 8px;
+    display: flex; overflow: hidden auto;
+  }
+  .sidebar.collapsed .sidebar-nav { align-items: center; padding: 4px 0 8px }
+  .sidebar-nav-item {
+    cursor: pointer; color: rgba(255,255,255,.45);
+    white-space: nowrap;
+    background: none; border-radius: 8px;
+    align-items: center; gap: 7px;
+    width: 100%; height: 34px; padding: 0 10px;
+    font-family: var(--ff); font-size: 13px; font-weight: 500;
+    text-decoration: none;
+    transition: color .12s ease-out, background .12s ease-out;
+    display: flex; border: none;
+  }
+  .sidebar.collapsed .sidebar-nav-item { justify-content: center; gap: 0; width: 34px; padding: 0 }
+  .sidebar-nav-item:hover,
+  .sidebar-nav-item.active { color: #fff; background: rgba(255,255,255,.1) }
+  .sidebar-nav-icon { flex-shrink: 0; width: 15px; height: 15px }
+  .sidebar-nav-label { white-space: nowrap; flex: 1; overflow: hidden }
+  .sidebar-nav-item-count {
+    color: rgba(255,255,255,.45);
+    background: rgba(255,255,255,.08);
+    border-radius: 10px; margin-left: auto;
+    padding: 1px 7px; font-size: 11px; font-weight: 600; line-height: 18px;
+  }
+  .sidebar-nav-item.active .sidebar-nav-item-count { color: rgba(255,255,255,.75); background: rgba(255,255,255,.14) }
+
+  /* Pre-footer (settings) */
+  .sidebar-pre-footer { flex-shrink: 0; padding: 0 10px 4px }
+  .sidebar.collapsed .sidebar-pre-footer { justify-content: center; padding: 0 0 4px; display: flex }
+  .sidebar.collapsed .sidebar-pre-footer .sidebar-nav-item { justify-content: center; gap: 0; width: 34px; padding: 0 }
+
+  /* Footer */
+  .sidebar-footer {
+    border-top: 1px solid rgba(255,255,255,.06);
+    flex-shrink: 0; align-items: center; gap: 8px;
+    min-width: 0; padding: 10px 12px; display: flex;
+  }
+  .sidebar-footer-avatar {
+    color: #a2d8e9;
+    background: oklch(52% .12 220 / .35);
+    border: 1px solid oklch(52% .12 220 / .5);
+    border-radius: 50%; flex-shrink: 0;
+    justify-content: center; align-items: center;
+    width: 26px; height: 26px;
+    font-family: var(--ff); font-size: 11px; font-weight: 600;
+    display: flex;
+  }
+  .sidebar-footer-email {
+    color: rgba(255,255,255,.5);
+    white-space: nowrap; text-overflow: ellipsis;
+    flex: 1; min-width: 0; overflow: hidden;
+    font-size: 13px;
+  }
+  .sidebar-collapse-btn {
+    cursor: pointer; color: var(--text-3);
+    background: none; border: none; border-radius: 4px;
+    flex-shrink: 0; justify-content: center; align-items: center;
+    padding: 4px; transition: color .12s ease-out; display: flex;
+  }
+  .sidebar-collapse-btn:hover { color: rgba(255,255,255,.8) }
+
+  /* ══════════════════════════════════════════════════════
+     PANEL AREA
+  ══════════════════════════════════════════════════════ */
+  .panel-area {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: row;
+    gap: var(--gap);
+    overflow: hidden;
+  }
+  .list-col {
+    width: var(--list-card); flex-shrink: 0;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .detail-col {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     CARD
+  ══════════════════════════════════════════════════════ */
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    flex-direction: column;
+    min-height: 0; display: flex;
+    overflow: hidden;
+    flex: 1;
+  }
+  .card-header {
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0; align-items: center; gap: 10px;
+    height: 54px; padding: 0 16px; display: flex;
+  }
+  .card-header-title {
+    color: var(--text);
+    white-space: nowrap; text-overflow: ellipsis;
+    flex: 1; min-width: 0;
+    font-size: 14px; font-weight: 600; overflow: hidden;
+  }
+  .card-body { flex: 1; min-height: 0; overflow: hidden auto }
+  .card-body-padded { padding: 16px }
+
+  /* ══════════════════════════════════════════════════════
+     LIST ITEMS (searches)
+  ══════════════════════════════════════════════════════ */
+  .list-item {
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start; gap: 10px;
+    min-height: 56px; padding: 10px 14px;
+    transition: background .12s ease-out;
+    display: flex;
+  }
+  .list-item:last-child { border-bottom: none }
+  .list-item:hover { background: var(--bg-hover) }
+  .list-item.selected { background: var(--bg-selected) }
+  .list-item-body { flex: 1; min-width: 0 }
+  .list-item-name {
+    color: var(--text); white-space: nowrap;
+    text-overflow: ellipsis; margin-bottom: 2px;
+    font-size: 13px; font-weight: 500; overflow: hidden;
+  }
+  .list-item-meta {
+    color: var(--text-2); white-space: nowrap;
+    text-overflow: ellipsis; font-size: 12px; overflow: hidden;
+  }
+  .list-item-side {
+    flex-direction: column; flex-shrink: 0;
+    align-items: flex-end; gap: 4px; display: flex;
+  }
+  .mono {
+    font-variant-numeric: tabular-nums;
+    font-family: var(--fm); font-size: 12px; font-weight: 500;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     STATUS PILLS
+  ══════════════════════════════════════════════════════ */
+  .status-pill {
+    white-space: nowrap; border-radius: 99px;
+    align-items: center; gap: 4px;
+    padding: 1px 6px 1px 5px;
+    font-size: 11px; font-weight: 500; display: inline-flex;
+  }
+  .status-dot { border-radius: 50%; flex-shrink: 0; width: 6px; height: 6px }
+  .status-pill.running    { color: oklch(50% .14 75);  background: oklch(70% .14 75 / .12) }
+  .status-pill.succeeded  { color: oklch(42% .13 155); background: oklch(58% .13 155 / .1) }
+  .status-pill.failed     { color: oklch(42% .18 25);  background: oklch(58% .18 25 / .1)  }
+  .status-pill.cancelled  { color: var(--text-3);      background: #dce2e6 }
+  .status-pill.no-results { color: var(--text-3);      background: #dce2e6 }
+  .status-pill.running   .status-dot { background: var(--warn); animation: 1.6s ease-in-out infinite status-pulse }
+  .status-pill.succeeded .status-dot { background: var(--ok) }
+  .status-pill.failed    .status-dot { background: var(--bad) }
+  .status-pill.cancelled .status-dot { background: var(--text-3) }
+  @keyframes status-pulse {
+    0%,to { opacity:1; transform:scale(1) }
+    50%   { opacity:.4; transform:scale(.82) }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     SEARCH DETAIL — RUNNING / FAILED / SUCCEEDED STATES
+  ══════════════════════════════════════════════════════ */
+  .search-running-state {
+    text-align: center;
+    flex-direction: column; justify-content: center;
+    align-items: center; gap: 16px; padding: 48px 32px; display: flex;
+  }
+  .search-running-indicator {
+    background: oklch(70% .14 75 / .12);
+    border-radius: 50%; justify-content: center;
+    align-items: center; width: 40px; height: 40px;
+    display: flex; position: relative;
+  }
+  .search-running-dot {
+    background: var(--warn); border-radius: 50%;
+    width: 12px; height: 12px;
+    animation: 1.6s ease-in-out infinite status-pulse;
+  }
+  .search-running-elapsed {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-3); font-family: var(--fm); font-size: 12px;
+  }
+  .search-failed-state {
+    text-align: center;
+    flex-direction: column; justify-content: center;
+    align-items: center; gap: 12px; padding: 48px 32px; display: flex;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     CANDIDATE ROW (search results)
+  ══════════════════════════════════════════════════════ */
+  .candidate-row {
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    transition: background .12s ease-out; display: flex;
+  }
+  .candidate-row:last-child { border-bottom: none }
+  .candidate-row:hover { background: var(--bg-hover) }
+  .candidate-info { flex: 1; min-width: 0 }
+  .candidate-name { color: var(--text); margin-bottom: 2px; font-size: 13px; font-weight: 500 }
+  .candidate-meta { color: var(--text-2); font-size: 12px }
+
+  /* Patient avatar */
+  .patient-avatar {
+    color: #fff;
+    background: linear-gradient(135deg, #0088a5, #00808f, #00787d);
+    border-radius: 10px; flex-shrink: 0;
+    justify-content: center; align-items: center;
+    font-size: 11px; font-weight: 600; display: flex;
+  }
+  .patient-avatar.sm { width: 32px; height: 32px }
+  .patient-avatar.md { width: 40px; height: 40px; font-size: 14px }
+  .patient-avatar.lg { border-radius: 14px; width: 52px; height: 52px; font-size: 18px }
+
+  /* Match meter */
+  .match-meter { flex-direction: column; gap: 4px; min-width: 80px; display: flex }
+  .match-meter-label {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-2); font-family: var(--fm);
+    font-size: 12px; font-weight: 500;
+  }
+  .match-meter-bar-track {
+    background: var(--border); border-radius: 2px; height: 4px; overflow: hidden;
+  }
+  .match-meter-bar-fill { border-radius: 2px; height: 100%; transition: width .3s ease-out }
+  .match-meter-bar-fill.high { background: var(--ok) }
+  .match-meter-bar-fill.mid  { background: var(--warn) }
+  .match-meter-bar-fill.low  { background: var(--bad) }
+
+  /* ══════════════════════════════════════════════════════
+     PATIENT DETAIL PANEL
+  ══════════════════════════════════════════════════════ */
+  .patient-header-info { flex: 1; min-width: 0 }
+  .patient-header-name {
+    color: var(--text); margin-bottom: 4px;
+    font-size: 16px; font-weight: 600;
+  }
+  .patient-header-meta { flex-wrap: wrap; gap: 16px; display: flex }
+  .patient-header-field { flex-direction: column; gap: 1px; display: flex }
+  .patient-header-field-label {
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--text-3); font-size: 10px; font-weight: 600;
+  }
+  .patient-header-field-value {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-2); font-family: var(--fm);
+    font-size: 12px; font-weight: 500;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     TABS
+  ══════════════════════════════════════════════════════ */
+  .tabs {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface);
+    flex-shrink: 0; gap: 2px;
+    padding: 0 16px; display: flex; overflow-x: auto;
+  }
+  .tab {
+    height: 40px; color: var(--text-2); cursor: pointer;
+    white-space: nowrap; user-select: none;
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    align-items: center; gap: 6px; padding: 0 12px;
+    font-family: var(--ff); font-size: 13px; font-weight: 500;
+    transition: color .12s ease-out, border-color .12s ease-out;
+    display: flex;
+  }
+  .tab:hover { color: var(--text) }
+  .tab.active { color: var(--text); border-bottom-color: var(--cyan-600) }
+  .tab-count {
+    background: var(--bg-app); color: var(--text-3);
+    text-align: center; border-radius: 99px;
+    min-width: 18px; padding: 1px 6px;
+    font-size: 11px; font-weight: 600;
+  }
+  .tab.active .tab-count { color: var(--cyan-600); background: oklch(58% .12 220 / .1) }
+
+  /* ══════════════════════════════════════════════════════
+     DOCUMENT ROWS — current plain text style
+  ══════════════════════════════════════════════════════ */
+  .document-row {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+  .document-row:last-child { border-bottom: none }
+  .document-header {
+    align-items: flex-start; gap: 10px; margin-bottom: 6px; display: flex;
+  }
+  .document-title { color: var(--text); flex: 1; font-size: 13px; font-weight: 500 }
+  .document-date {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-3); flex-shrink: 0;
+    font-family: var(--fm); font-size: 12px; font-weight: 500;
+  }
+  .document-source {
+    text-transform: uppercase; letter-spacing: .04em;
+    color: var(--text-3); margin-bottom: 6px;
+    font-size: 11px; font-weight: 600;
+  }
+  .document-content {
+    color: var(--text-2); white-space: pre-line;
+    font-size: 12px; line-height: 1.6;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     REDESIGNED DOCUMENT CARDS — proposed new style
+  ══════════════════════════════════════════════════════ */
+  .doc-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-surface);
+    margin: 0 0 10px;
+    overflow: hidden;
+    transition: box-shadow .15s ease-out, border-color .15s ease-out;
+  }
+  .doc-card:hover {
+    border-color: oklch(58% .12 220 / .4);
+    box-shadow: 0 0 0 3px oklch(58% .12 220 / .06);
+  }
+  .doc-card-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface-secondary);
+  }
+  .doc-cat-icon {
+    width: 28px; height: 28px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
+  }
+  .doc-cat-icon.labs     { background: oklch(58% .12 220 / .1) }
+  .doc-cat-icon.imaging  { background: oklch(58% .13 155 / .1) }
+  .doc-cat-icon.path     { background: oklch(70% .14 75 / .12) }
+  .doc-cat-icon.history  { background: oklch(58% .18 25 / .1) }
+  .doc-cat-icon.other    { background: oklch(91% .008 230) }
+  .doc-card-title-area { flex: 1; min-width: 0 }
+  .doc-card-title {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .doc-card-source {
+    font-size: 11px; color: var(--text-3); margin-top: 1px;
+    text-transform: uppercase; letter-spacing: .04em; font-weight: 600;
+  }
+  .doc-card-date {
+    font-family: var(--fm); font-size: 12px; color: var(--text-3);
+    flex-shrink: 0;
+  }
+  .doc-card-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0 }
+  .doc-pdf-btn {
+    display: flex; align-items: center; gap: 5px;
+    padding: 4px 9px; height: 28px; border-radius: 6px;
+    border: 1px solid var(--border); font-size: 12px; font-weight: 500;
+    cursor: pointer; background: transparent; color: var(--text-2);
+    font-family: var(--ff);
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .doc-pdf-btn:hover {
+    background: oklch(58% .12 220 / .07);
+    border-color: oklch(58% .12 220 / .4);
+    color: var(--cyan-600);
+  }
+
+  /* Structured content fields inside card */
+  .doc-card-body { padding: 12px 14px }
+  .doc-fields {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px; margin-bottom: 10px;
+  }
+  .doc-field { display: flex; flex-direction: column; gap: 2px }
+  .doc-field-label {
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--text-3);
+  }
+  .doc-field-value {
+    font-size: 13px; color: var(--text);
+    font-family: var(--fm); font-variant-numeric: tabular-nums;
+  }
+  .doc-field-value.flagged-H { color: var(--bad); font-weight: 600 }
+  .doc-field-value.flagged-L { color: var(--warn); font-weight: 600 }
+  .flag {
+    display: inline-block; font-size: 9px; font-weight: 800;
+    padding: 1px 4px; border-radius: 3px; margin-left: 4px;
+    font-family: var(--fm); letter-spacing: .04em;
+    vertical-align: middle;
+  }
+  .flag-H { background: oklch(58% .18 25 / .12); color: var(--bad) }
+  .flag-L { background: oklch(70% .14 75 / .15); color: var(--warn) }
+  .doc-narrative {
+    font-size: 12px; color: var(--text-2);
+    line-height: 1.6; white-space: pre-line;
+    border-top: 1px solid var(--border); padding-top: 10px; margin-top: 2px;
+  }
+  .doc-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px }
+  .doc-tag {
+    font-size: 11px; font-weight: 600; padding: 2px 7px;
+    border-radius: 99px; border: 1px solid var(--border);
+    color: var(--text-2); background: var(--bg-surface-secondary);
+  }
+  .doc-tag.positive { background: oklch(58% .18 25 / .08); border-color: oklch(58% .18 25 / .25); color: var(--bad) }
+  .doc-tag.negative { background: oklch(58% .13 155 / .08); border-color: oklch(58% .13 155 / .25); color: var(--ok) }
+
+  /* ══════════════════════════════════════════════════════
+     EMPTY STATE
+  ══════════════════════════════════════════════════════ */
+  .empty-state {
+    text-align: center;
+    flex-direction: column; justify-content: center;
+    align-items: center; gap: 12px;
+    height: 100%; min-height: 200px; padding: 48px 24px; display: flex;
+  }
+  .empty-state-icon { color: var(--text-3); opacity: .6 }
+  .empty-state-title { color: var(--text-2); font-size: 14px; font-weight: 600 }
+  .empty-state-body { color: var(--text-3); max-width: 260px; font-size: 13px; line-height: 1.5 }
+
+  /* ══════════════════════════════════════════════════════
+     SKELETON
+  ══════════════════════════════════════════════════════ */
+  .skeleton {
+    background: linear-gradient(90deg, var(--border) 25%, oklch(94% .006 230) 50%, var(--border) 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: 1.6s ease-in-out infinite shimmer;
+  }
+  @keyframes shimmer { 0% { background-position: -200% } to { background-position: 200% } }
+
+  /* ══════════════════════════════════════════════════════
+     BUTTONS
+  ══════════════════════════════════════════════════════ */
+  .btn {
+    cursor: pointer; white-space: nowrap;
+    border: none; border-radius: 8px; outline: none;
+    justify-content: center; align-items: center; gap: 6px;
+    height: 36px; padding: 0 14px;
+    font-family: var(--ff); font-size: 13px; font-weight: 500;
+    transition: background .12s, color .12s, border-color .12s, opacity .12s;
+    display: inline-flex;
+  }
+  .btn-compact { height: 32px; padding: 0 12px; font-size: 13px }
+  .btn-default { border: 1px solid var(--border); color: var(--text); background: none }
+  .btn-default:hover { background: var(--bg-hover) }
+  .btn-primary { background: var(--navy-800); color: #fff; border: 1px solid transparent }
+  .btn-primary:hover { background: var(--navy-700) }
+  .btn-cta, .btn-cyan { background: var(--cyan-600); color: #fff; border: 1px solid transparent }
+  .btn-cta:hover, .btn-cyan:hover { background: var(--cyan-700) }
+  .icon-btn {
+    cursor: pointer; color: var(--text-3);
+    background: none; border: none; border-radius: 6px;
+    flex-shrink: 0; justify-content: center; align-items: center;
+    width: 32px; height: 32px; padding: 0;
+    transition: background .12s, color .12s; display: flex;
+  }
+  .icon-btn:hover { background: var(--bg-hover); color: var(--text) }
+
+  /* ══════════════════════════════════════════════════════
+     PATIENTS TABLE
+  ══════════════════════════════════════════════════════ */
+  .patients-table { width: 100%; border-collapse: collapse }
+  .label-caps {
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--text-3); font-size: 11px; font-weight: 600;
+  }
+  th.label-caps { padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--border) }
+  .patient-row td { padding: 11px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2) }
+  .patient-row:last-child td { border-bottom: none }
+  .patient-row { cursor: pointer; transition: background .12s }
+  .patient-row:hover td { background: var(--bg-hover) }
+  .patient-name-cell { display: flex; align-items: center; gap: 10px }
+  .p-name { font-weight: 500; color: var(--text) }
+  .p-mrn { font-family: var(--fm); font-variant-numeric: tabular-nums }
+
+  /* ══════════════════════════════════════════════════════
+     FILTERS (patients page)
+  ══════════════════════════════════════════════════════ */
+  .search-input-wrap { border-bottom: 1px solid var(--border); flex-shrink: 0; padding: 10px 12px }
+  .search-input-inner { position: relative }
+  .search-input-icon {
+    color: var(--text-3); pointer-events: none;
+    position: absolute; top: 50%; left: 8px; transform: translateY(-50%);
+  }
+  .search-input-field {
+    border: 1px solid var(--border); background: var(--bg-app);
+    width: 100%; height: 32px; color: var(--text);
+    border-radius: 6px; outline: none;
+    padding: 0 10px 0 30px;
+    font-family: var(--ff); font-size: 13px;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .search-input-field::placeholder { color: var(--text-3) }
+  .search-input-field:focus {
+    border-color: var(--cyan-600);
+    box-shadow: 0 0 0 2px oklch(58% .12 220 / .12);
+  }
+
+  /* ══════════════════════════════════════════════════════
+     MODAL
+  ══════════════════════════════════════════════════════ */
+  .modal-backdrop {
+    backdrop-filter: blur(4px);
+    z-index: 100; background: rgba(0,0,0,.4);
+    justify-content: center; align-items: center;
+    padding: 20px; animation: .18s ease-out modal-backdrop-in;
+    display: flex; position: fixed; inset: 0;
+  }
+  @keyframes modal-backdrop-in { 0% { opacity: 0 } to { opacity: 1 } }
+  .modal {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    width: min(540px, 100%);
+    animation: .18s ease-out modal-in;
+    box-shadow: 0 25px 50px rgba(0,0,0,.25);
+  }
+  @keyframes modal-in { 0% { opacity:0; transform:scale(.97) } to { opacity:1; transform:scale(1) } }
+  .modal-header {
+    border-bottom: 1px solid var(--border);
+    align-items: center; gap: 10px; height: 54px;
+    padding: 0 20px; display: flex;
+  }
+  .modal-title { color: var(--text); flex: 1; font-size: 15px; font-weight: 600 }
+  .modal-close {
+    cursor: pointer; color: var(--text-3);
+    background: none; border: none; border-radius: 4px;
+    align-items: center; padding: 4px;
+    transition: color .12s; display: flex; font-size: 18px;
+  }
+  .modal-close:hover { color: var(--text) }
+  .modal-body { padding: 20px }
+  .modal-footer {
+    border-top: 1px solid var(--border);
+    justify-content: flex-end; gap: 8px;
+    padding: 16px 20px; display: flex;
+  }
+  .form-group { flex-direction: column; gap: 5px; display: flex }
+  .form-label { color: var(--text); font-size: 13px; font-weight: 500 }
+  .form-label-required { color: var(--bad); margin-left: 2px }
+  .form-label-optional { color: var(--text-2); margin-left: 4px; font-weight: 400 }
+  .form-input {
+    border: 1px solid var(--border); background: var(--bg-surface);
+    height: 36px; color: var(--text); border-radius: 6px;
+    outline: none; width: 100%; padding: 0 10px;
+    font-family: var(--ff); font-size: 13px;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .form-input::placeholder { color: var(--text-3) }
+  .form-input:focus {
+    border-color: var(--cyan-600);
+    box-shadow: 0 0 0 2px oklch(58% .12 220 / .15);
+  }
+
+  /* ══════════════════════════════════════════════════════
+     LOGIN
+  ══════════════════════════════════════════════════════ */
+  .login-shell {
+    background: var(--navy-800);
+    justify-content: center; align-items: center;
+    min-height: 100vh; padding: 24px; display: flex;
+  }
+  .login-card {
+    background: var(--bg-surface);
+    border-radius: var(--r);
+    width: min(400px, 100%);
+    padding: 40px;
+    box-shadow: 0 25px 60px rgba(0,0,0,.4);
+  }
+  .login-logo { align-items: center; gap: 10px; margin-bottom: 32px; display: flex }
+  .login-logo-icon { color: var(--navy-800) }
+  .login-logo-name { color: var(--navy-800); font-size: 18px; font-weight: 600 }
+  .login-heading { color: var(--text); letter-spacing: -.02em; margin: 0 0 6px; font-size: 24px; font-weight: 600 }
+  .login-sub { color: var(--text-2); margin: 0 0 28px; font-size: 13px }
+  .login-form { flex-direction: column; gap: 16px; display: flex }
+  .login-submit { width: 100%; height: 40px; margin-top: 4px }
+
+  /* Spinner */
+  .spinner {
+    border: 2px solid var(--border);
+    border-top-color: var(--cyan-600);
+    border-radius: 50%; flex-shrink: 0;
+    width: 18px; height: 18px;
+    animation: .7s linear infinite spin;
+  }
+  @keyframes spin { to { transform: rotate(360deg) } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px }
+  ::-webkit-scrollbar-track { background: none }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px }
+  .sidebar ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1) }
+
+  /* ══════════════════════════════════════════════════════
+     SCREEN VISIBILITY
+  ══════════════════════════════════════════════════════ */
+  .screen { display: none }
+  .screen.active { display: contents }
+  .tab-panel { display: none }
+  .tab-panel.active { display: block }
+
+  /* Demo toolbar */
+  .demo-bar {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    z-index: 999;
+    display: flex; gap: 3px; align-items: center;
+    background: rgba(14,26,44,.9);
+    border: 1px solid rgba(255,255,255,.1); border-top: none;
+    border-radius: 0 0 10px 10px; padding: 5px 10px;
+    backdrop-filter: blur(12px);
+  }
+  .demo-btn {
+    padding: 3px 10px; border-radius: 5px;
+    font-size: 11px; font-weight: 600;
+    color: rgba(255,255,255,.4);
+    cursor: pointer; background: none; border: none;
+    font-family: var(--ff); transition: all .12s;
+  }
+  .demo-btn:hover { color: rgba(255,255,255,.7) }
+  .demo-btn.active { background: oklch(58% .12 220 / .25); color: oklch(75% .12 220) }
+  .demo-sep { color: rgba(255,255,255,.15); font-size: 11px }
+
+  /* Section badge */
+  .section-badge {
+    position: absolute; top: 6px; right: 6px; z-index: 5;
+    background: var(--navy-800); color: rgba(255,255,255,.5);
+    font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px;
+    letter-spacing: .04em; text-transform: uppercase; pointer-events: none;
+  }
+  </style>
+</head>
+<body>
+
+<!-- Demo navigation bar -->
+<div class="demo-bar">
+  <button class="demo-btn" onclick="goTo('login')">Login</button>
+  <span class="demo-sep">|</span>
+  <button class="demo-btn active" onclick="goTo('searches')">Searches</button>
+  <button class="demo-btn" onclick="goTo('patients')">Patients</button>
+  <span class="demo-sep">|</span>
+  <button class="demo-btn" onclick="openDetail('current')">Current Tab Style</button>
+  <button class="demo-btn" onclick="openDetail('redesign')">✦ Redesigned Tabs</button>
+</div>
+
+<!-- ╔══════════════════════════════════════════════╗
+     ║  LOGIN                                      ║
+     ╚══════════════════════════════════════════════╝ -->
+<div id="page-login" style="display:none; position:fixed; inset:0; z-index:50">
+  <div class="login-shell">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg class="login-logo-icon" width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <rect width="30" height="30" rx="8" fill="currentColor"/>
+          <path d="M15 7C10.58 7 7 10.58 7 15s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14.4c-3.53 0-6.4-2.87-6.4-6.4S11.47 8.6 15 8.6s6.4 2.87 6.4 6.4-2.87 6.4-6.4 6.4z" fill="white" opacity=".9"/>
+          <path d="M15 10.5v4.5l3 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="login-logo-name">MedBook360</span>
+      </div>
+      <h1 class="login-heading">Sign in</h1>
+      <p class="login-sub">Coordinator access to the records retrieval portal.</p>
+      <div class="login-form">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="coordinator@clinic.org" value="coordinator@specode.ai">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" value="••••••••••">
+        </div>
+        <button class="btn btn-primary login-submit" onclick="goTo('searches')">Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════╗
+     ║  APP SHELL                                  ║
+     ╚══════════════════════════════════════════════╝ -->
+<div id="app" class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M11 2C6.03 2 2 6.03 2 11s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16.2C6.75 18.2 3.8 15.25 3.8 11S6.75 3.8 11 3.8 18.2 6.75 18.2 11 15.25 18.2 11 18.2z" fill="currentColor"/>
+          <path d="M11 5.5v5.5l3.5 1.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <span class="sidebar-logo-text">MedBook360</span>
+    </div>
+
+    <div class="sidebar-new-search">
+      <button class="sidebar-new-search-btn" onclick="openModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span class="sidebar-new-search-label">New Search</span>
+        <span class="sidebar-new-search-spacer"></span>
+        <span class="sidebar-new-search-kbd">⌘K</span>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="sidebar-nav-item active" id="nav-searches" onclick="goTo('searches')">
+        <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="sidebar-nav-label">Searches</span>
+        <span class="sidebar-nav-item-count">7</span>
+      </button>
+      <button class="sidebar-nav-item" id="nav-patients" onclick="goTo('patients')">
+        <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="sidebar-nav-label">Patients</span>
+        <span class="sidebar-nav-item-count">13</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-pre-footer">
+      <button class="sidebar-nav-item">
+        <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        <span class="sidebar-nav-label">Settings</span>
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-avatar">C</div>
+      <span class="sidebar-footer-email">coordinator@specode.ai</span>
+      <button class="sidebar-collapse-btn" onclick="toggleSidebar()" title="Collapse sidebar">
+        <svg id="collapseIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── SEARCHES PAGE ── -->
+  <div class="panel-area" id="page-searches">
+    <!-- Left: search list -->
+    <div class="list-col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">Searches</div>
+          <button class="icon-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div class="card-body">
+          <!-- Running item -->
+          <div class="list-item" onclick="openDetail('current')">
+            <div class="list-item-body">
+              <div class="list-item-name">Alex Johnson</div>
+              <div class="list-item-meta mono">DOB 04/15/1957</div>
+            </div>
+            <div class="list-item-side">
+              <span class="status-pill running"><span class="status-dot"></span>Running</span>
+              <span style="font-size:11px;color:var(--text-3)">0:42</span>
+            </div>
+          </div>
+          <!-- Failed -->
+          <div class="list-item" onclick="openDetail('current')">
+            <div class="list-item-body">
+              <div class="list-item-name">Jane Smith</div>
+              <div class="list-item-meta mono">DOB 11/11/1999 · 333333333</div>
+            </div>
+            <div class="list-item-side">
+              <span class="status-pill failed"><span class="status-dot"></span>Failed</span>
+              <span style="font-size:11px;color:var(--text-3)">2d ago</span>
+            </div>
+          </div>
+          <!-- Succeeded -->
+          <div class="list-item selected" onclick="openDetail('current')">
+            <div class="list-item-body">
+              <div class="list-item-name">Steven Tan</div>
+              <div class="list-item-meta mono">DOB 11/11/1999 · 10001</div>
+            </div>
+            <div class="list-item-side">
+              <span class="status-pill succeeded"><span class="status-dot"></span>Complete</span>
+              <span style="font-size:11px;color:var(--text-3)">6d ago</span>
+            </div>
+          </div>
+          <div class="list-item" onclick="openDetail('current')">
+            <div class="list-item-body">
+              <div class="list-item-name">Jim Jones</div>
+              <div class="list-item-meta mono">DOB 03/03/1998</div>
+            </div>
+            <div class="list-item-side">
+              <span class="status-pill succeeded"><span class="status-dot"></span>Complete</span>
+              <span style="font-size:11px;color:var(--text-3)">6d ago</span>
+            </div>
+          </div>
+          <div class="list-item" onclick="openDetail('current')">
+            <div class="list-item-body">
+              <div class="list-item-name">Hugh Grant</div>
+              <div class="list-item-meta mono">DOB 11/11/1999</div>
+            </div>
+            <div class="list-item-side">
+              <span class="status-pill succeeded"><span class="status-dot"></span>Complete</span>
+              <span style="font-size:11px;color:var(--text-3)">6d ago</span>
+            </div>
+          </div>
+          <div class="list-item" onclick="openDetail('current')">
+            <div class="list-item-body">
+              <div class="list-item-name">Jim Ho</div>
+              <div class="list-item-meta mono">DOB 11/11/1988 · 10001</div>
+            </div>
+            <div class="list-item-side">
+              <span class="status-pill no-results"><span class="status-dot"></span>No results</span>
+              <span style="font-size:11px;color:var(--text-3)">6d ago</span>
+            </div>
+          </div>
+          <div class="list-item" onclick="openDetail('current')">
+            <div class="list-item-body">
+              <div class="list-item-name">Jim Doe</div>
+              <div class="list-item-meta mono">DOB 11/11/1999 · 90210</div>
+            </div>
+            <div class="list-item-side">
+              <span class="status-pill succeeded"><span class="status-dot"></span>Complete</span>
+              <span style="font-size:11px;color:var(--text-3)">6d ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: detail panel (current style) -->
+    <div class="detail-col" id="detail-current" style="display:none">
+      <div class="card" style="height:100%">
+        <div style="display:flex;align-items:flex-start;gap:0;padding:12px 14px 0;position:relative">
+          <button class="icon-btn" onclick="closeDetail()" style="margin-right:6px" title="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <div class="patient-avatar lg">ST</div>
+          <div style="flex:1;min-width:0;margin-left:12px">
+            <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.015em;line-height:1.25">Steven Tan</div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;row-gap:2px;margin-top:4px;font-size:12px;color:var(--text-2)">
+              <span><span style="color:var(--text-3)">DOB </span>11/11/1999 · <span style="color:var(--text-3)">26y</span></span>
+              <span><span style="color:var(--text-3)">MRN </span><span style="font-family:var(--fm)">MRN-WY8MWN</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+
+        <!-- Tabs (current style) -->
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(this,'all')">All <span class="tab-count">11</span></button>
+          <button class="tab" onclick="switchTab(this,'labs')">Labs <span class="tab-count">4</span></button>
+          <button class="tab" onclick="switchTab(this,'imaging')">Imaging <span class="tab-count">3</span></button>
+          <button class="tab" onclick="switchTab(this,'pathology')">Pathology <span class="tab-count">2</span></button>
+          <button class="tab" onclick="switchTab(this,'history')">History <span class="tab-count">1</span></button>
+          <button class="tab" onclick="switchTab(this,'discharge')">Discharge</button>
+          <button class="tab" onclick="switchTab(this,'medications')">Medications <span class="tab-count">1</span></button>
+          <button class="tab" onclick="switchTab(this,'other')">Other</button>
+        </div>
+
+        <!-- Current plain-text document style -->
+        <div class="card-body card-body-padded">
+          <div class="section-badge">CURRENT STYLE</div>
+
+          <!-- Doc row 1 - Labs -->
+          <div class="document-row">
+            <div class="document-header">
+              <div style="flex:1;min-width:0">
+                <div class="document-title">CBC — Complete Blood Count</div>
+                <div class="document-source">Labs · SMH Hospital</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                <button style="display:flex;align-items:center;gap:5px;padding:4px 9px;height:28px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;background:transparent;color:var(--text-2);font-family:var(--ff)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  PDF
+                </button>
+                <span class="document-date">01/01/2026</span>
+              </div>
+            </div>
+            <div class="document-content">Hemoglobin: 12.9 g/dL (H - High)
+WBC: 9.4 x 10^9/L
+Platelets: 210 x 10^9/L
+Hematocrit: 38.2%
+MCV: 82 fL
+MCH: 27.4 pg
+
+Interpretation: Mild elevation in hemoglobin. WBC and platelets within normal range.</div>
+          </div>
+
+          <!-- Doc row 2 - Imaging -->
+          <div class="document-row">
+            <div class="document-header">
+              <div style="flex:1;min-width:0">
+                <div class="document-title">Mammogram — Bilateral Screening</div>
+                <div class="document-source">Imaging · Doctors Hospital</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                <button style="display:flex;align-items:center;gap:5px;padding:4px 9px;height:28px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;background:transparent;color:var(--text-2);font-family:var(--ff)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  PDF
+                </button>
+                <span class="document-date">01/25/2026</span>
+              </div>
+            </div>
+            <div class="document-content">Bilateral screening mammography was performed.
+
+RIGHT BREAST: Scattered fibroglandular tissue. There is a 1.2 cm oval circumscribed mass at 2 o'clock, 5 cm from nipple. Correlates with palpable lump reported by patient.
+
+LEFT BREAST: No suspicious mass, calcification, or architectural distortion.
+
+IMPRESSION: BI-RADS Category 3 — Probably benign. Recommend 6-month follow-up ultrasound.</div>
+          </div>
+
+          <!-- Doc row 3 -->
+          <div class="document-row">
+            <div class="document-header">
+              <div style="flex:1;min-width:0">
+                <div class="document-title">Core Biopsy — Right Breast</div>
+                <div class="document-source">Pathology · Blake Hospital</div>
+              </div>
+              <span class="document-date">12/28/2025</span>
+            </div>
+            <div class="document-content">SPECIMEN: Right breast core biopsy, 2 o'clock position, 5 cm from nipple.
+
+DIAGNOSIS: INVASIVE DUCTAL CARCINOMA, Grade 2
+
+Receptor status:
+- Estrogen Receptor (ER): Positive (90%)
+- Progesterone Receptor (PR): Positive (60%)
+- HER2/neu: 2+ (Equivocal — FISH pending)
+
+Ki-67 Proliferation Index: 22%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: detail panel (redesigned) -->
+    <div class="detail-col" id="detail-redesign" style="display:none">
+      <div class="card" style="height:100%">
+        <div style="display:flex;align-items:flex-start;gap:0;padding:12px 14px 0;position:relative">
+          <button class="icon-btn" onclick="closeDetail()" style="margin-right:6px" title="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <div class="patient-avatar lg">ST</div>
+          <div style="flex:1;min-width:0;margin-left:12px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.015em;line-height:1.25">Steven Tan</div>
+              <span class="status-pill succeeded" style="font-size:10px"><span class="status-dot"></span>Complete</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;row-gap:2px;margin-top:4px;font-size:12px;color:var(--text-2)">
+              <span><span style="color:var(--text-3)">DOB </span>11/11/1999 · <span style="color:var(--text-3)">26y</span></span>
+              <span><span style="color:var(--text-3)">MRN </span><span style="font-family:var(--fm)">MRN-WY8MWN</span></span>
+              <span><span style="color:var(--text-3)">11 records from </span>3 hospitals</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+
+        <!-- Same tabs, same UX -->
+        <div class="tabs">
+          <button class="tab active" onclick="switchTabR(this,'r-all')">All <span class="tab-count">11</span></button>
+          <button class="tab" onclick="switchTabR(this,'r-labs')">Labs <span class="tab-count">4</span></button>
+          <button class="tab" onclick="switchTabR(this,'r-imaging')">Imaging <span class="tab-count">3</span></button>
+          <button class="tab" onclick="switchTabR(this,'r-pathology')">Pathology <span class="tab-count">2</span></button>
+          <button class="tab" onclick="switchTabR(this,'r-history')">History <span class="tab-count">1</span></button>
+          <button class="tab" onclick="switchTabR(this,'r-discharge')">Discharge</button>
+          <button class="tab" onclick="switchTabR(this,'r-medications')">Medications <span class="tab-count">1</span></button>
+          <button class="tab" onclick="switchTabR(this,'r-other')">Other</button>
+        </div>
+
+        <!-- REDESIGNED content -->
+        <div class="card-body card-body-padded" style="position:relative">
+          <div class="section-badge">✦ REDESIGNED</div>
+
+          <div id="r-all" class="tab-panel active" style="padding-top:4px">
+
+            <!-- Labs card -->
+            <div class="doc-card">
+              <div class="doc-card-header">
+                <div class="doc-cat-icon labs">🧪</div>
+                <div class="doc-card-title-area">
+                  <div class="doc-card-title">CBC — Complete Blood Count</div>
+                  <div class="doc-card-source">Labs · SMH Hospital</div>
+                </div>
+                <div class="doc-card-date" style="margin-right:8px">01/01/2026</div>
+                <div class="doc-card-actions">
+                  <button class="doc-pdf-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    PDF
+                  </button>
+                </div>
+              </div>
+              <div class="doc-card-body">
+                <div class="doc-fields">
+                  <div class="doc-field">
+                    <span class="doc-field-label">Hemoglobin</span>
+                    <span class="doc-field-value flagged-H">12.9 g/dL <span class="flag flag-H">H</span></span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">WBC</span>
+                    <span class="doc-field-value">9.4 × 10⁹/L</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">Platelets</span>
+                    <span class="doc-field-value">210 × 10⁹/L</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">Hematocrit</span>
+                    <span class="doc-field-value">38.2%</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">MCV</span>
+                    <span class="doc-field-value">82 fL</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">MCH</span>
+                    <span class="doc-field-value">27.4 pg</span>
+                  </div>
+                </div>
+                <div class="doc-narrative">Mild elevation in hemoglobin. WBC and platelets within normal range.</div>
+              </div>
+            </div>
+
+            <!-- Imaging card -->
+            <div class="doc-card">
+              <div class="doc-card-header">
+                <div class="doc-cat-icon imaging">🔬</div>
+                <div class="doc-card-title-area">
+                  <div class="doc-card-title">Mammogram — Bilateral Screening</div>
+                  <div class="doc-card-source">Imaging · Doctors Hospital</div>
+                </div>
+                <div class="doc-card-date" style="margin-right:8px">01/25/2026</div>
+                <div class="doc-card-actions">
+                  <button class="doc-pdf-btn">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    PDF
+                  </button>
+                </div>
+              </div>
+              <div class="doc-card-body">
+                <div class="doc-fields">
+                  <div class="doc-field">
+                    <span class="doc-field-label">Category</span>
+                    <span class="doc-field-value">Bilateral Mammography</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">BI-RADS</span>
+                    <span class="doc-field-value" style="color:var(--warn);font-weight:600">Category 3</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">Finding</span>
+                    <span class="doc-field-value">1.2 cm mass, 2 o'clock</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">Recommendation</span>
+                    <span class="doc-field-value">6-mo follow-up US</span>
+                  </div>
+                </div>
+                <div class="doc-tags">
+                  <span class="doc-tag">Right breast</span>
+                  <span class="doc-tag">Oval circumscribed</span>
+                  <span class="doc-tag">5cm from nipple</span>
+                  <span class="doc-tag negative">Left breast clear</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pathology card -->
+            <div class="doc-card">
+              <div class="doc-card-header">
+                <div class="doc-cat-icon path">🧬</div>
+                <div class="doc-card-title-area">
+                  <div class="doc-card-title">Core Biopsy — Right Breast</div>
+                  <div class="doc-card-source">Pathology · Blake Hospital</div>
+                </div>
+                <div class="doc-card-date">12/28/2025</div>
+              </div>
+              <div class="doc-card-body">
+                <div class="doc-fields">
+                  <div class="doc-field">
+                    <span class="doc-field-label">Diagnosis</span>
+                    <span class="doc-field-value" style="color:var(--bad);font-weight:700">Invasive Ductal Ca.</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">Grade</span>
+                    <span class="doc-field-value">Grade 2</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">ER Status</span>
+                    <span class="doc-field-value flagged-H">Positive (90%) <span class="flag flag-H">+</span></span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">PR Status</span>
+                    <span class="doc-field-value flagged-H">Positive (60%) <span class="flag flag-H">+</span></span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">HER2</span>
+                    <span class="doc-field-value" style="color:var(--warn);font-weight:600">2+ Equivocal</span>
+                  </div>
+                  <div class="doc-field">
+                    <span class="doc-field-label">Ki-67</span>
+                    <span class="doc-field-value flagged-H">22% <span class="flag flag-H">H</span></span>
+                  </div>
+                </div>
+                <div class="doc-tags">
+                  <span class="doc-tag positive">ER+</span>
+                  <span class="doc-tag positive">PR+</span>
+                  <span class="doc-tag" style="background:oklch(70% .14 75/.1);border-color:oklch(70% .14 75/.3);color:var(--warn)">HER2 Equivocal</span>
+                  <span class="doc-tag">FISH Pending</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /r-all -->
+
+          <!-- Other tab panels (placeholders) -->
+          <div id="r-labs" class="tab-panel" style="padding-top:4px">
+            <div class="doc-card">
+              <div class="doc-card-header">
+                <div class="doc-cat-icon labs">🧪</div>
+                <div class="doc-card-title-area"><div class="doc-card-title">CBC — Complete Blood Count</div><div class="doc-card-source">Labs · SMH Hospital</div></div>
+                <div class="doc-card-date" style="margin-right:8px">01/01/2026</div>
+                <div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div>
+              </div>
+              <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Hemoglobin</span><span class="doc-field-value flagged-H">12.9 g/dL <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">WBC</span><span class="doc-field-value">9.4 × 10⁹/L</span></div><div class="doc-field"><span class="doc-field-label">Platelets</span><span class="doc-field-value">210 × 10⁹/L</span></div><div class="doc-field"><span class="doc-field-label">Hematocrit</span><span class="doc-field-value">38.2%</span></div></div></div>
+            </div>
+            <div class="doc-card">
+              <div class="doc-card-header">
+                <div class="doc-cat-icon labs">⚗️</div>
+                <div class="doc-card-title-area"><div class="doc-card-title">CMP — Comprehensive Metabolic Panel</div><div class="doc-card-source">Labs · LWR Hospital</div></div>
+                <div class="doc-card-date" style="margin-right:8px">01/05/2026</div>
+                <div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div>
+              </div>
+              <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">BUN</span><span class="doc-field-value flagged-H">20 mg/dL <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">ALT</span><span class="doc-field-value flagged-H">50 U/L <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">Creatinine</span><span class="doc-field-value">0.9 mg/dL</span></div><div class="doc-field"><span class="doc-field-label">Glucose</span><span class="doc-field-value">94 mg/dL</span></div></div></div>
+            </div>
+          </div>
+
+          <div id="r-imaging" class="tab-panel" style="padding-top:4px">
+            <div class="doc-card">
+              <div class="doc-card-header">
+                <div class="doc-cat-icon imaging">🔬</div>
+                <div class="doc-card-title-area"><div class="doc-card-title">Mammogram — Bilateral Screening</div><div class="doc-card-source">Imaging · Doctors Hospital</div></div>
+                <div class="doc-card-date" style="margin-right:8px">01/25/2026</div>
+                <div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div>
+              </div>
+              <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">BI-RADS</span><span class="doc-field-value" style="color:var(--warn);font-weight:600">Category 3</span></div><div class="doc-field"><span class="doc-field-label">Finding</span><span class="doc-field-value">1.2 cm mass</span></div><div class="doc-field"><span class="doc-field-label">Location</span><span class="doc-field-value">R breast, 2 o'clock</span></div><div class="doc-field"><span class="doc-field-label">Follow-up</span><span class="doc-field-value">6-mo ultrasound</span></div></div></div>
+            </div>
+          </div>
+
+          <div id="r-pathology" class="tab-panel" style="padding-top:4px">
+            <div class="doc-card">
+              <div class="doc-card-header">
+                <div class="doc-cat-icon path">🧬</div>
+                <div class="doc-card-title-area"><div class="doc-card-title">Core Biopsy — Right Breast</div><div class="doc-card-source">Pathology · Blake Hospital</div></div>
+                <div class="doc-card-date">12/28/2025</div>
+              </div>
+              <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Diagnosis</span><span class="doc-field-value" style="color:var(--bad);font-weight:700">Invasive Ductal Ca.</span></div><div class="doc-field"><span class="doc-field-label">ER</span><span class="doc-field-value flagged-H">Positive 90% <span class="flag flag-H">+</span></span></div><div class="doc-field"><span class="doc-field-label">PR</span><span class="doc-field-value flagged-H">Positive 60% <span class="flag flag-H">+</span></span></div><div class="doc-field"><span class="doc-field-label">HER2</span><span class="doc-field-value" style="color:var(--warn);font-weight:600">2+ Equivocal</span></div></div><div class="doc-tags"><span class="doc-tag positive">ER+</span><span class="doc-tag positive">PR+</span><span class="doc-tag" style="background:oklch(70% .14 75/.1);border-color:oklch(70% .14 75/.3);color:var(--warn)">HER2 Equivocal</span></div></div>
+            </div>
+          </div>
+
+          <div id="r-history" class="tab-panel" style="padding-top:4px">
+            <div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon history">📋</div><div class="doc-card-title-area"><div class="doc-card-title">Medical History Summary</div><div class="doc-card-source">History · Tampa General</div></div><div class="doc-card-date">11/15/2025</div></div><div class="doc-card-body"><div class="doc-narrative">Patient reports history of hypertension (diagnosed 2018), well-controlled on lisinopril. Family history of breast cancer (maternal aunt). No prior surgeries. Non-smoker. Social drinker.</div></div></div>
+          </div>
+          <div id="r-discharge" class="tab-panel" style="padding-top:4px"><div class="empty-state"><div class="empty-state-icon">📄</div><div class="empty-state-title">No discharge documents</div><div class="empty-state-body">No documents in this category were found for this patient.</div></div></div>
+          <div id="r-medications" class="tab-panel" style="padding-top:4px"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon other">💊</div><div class="doc-card-title-area"><div class="doc-card-title">Medication List</div><div class="doc-card-source">Medications · SMH Hospital</div></div><div class="doc-card-date">01/01/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Lisinopril</span><span class="doc-field-value">10mg daily</span></div><div class="doc-field"><span class="doc-field-label">Indication</span><span class="doc-field-value">Hypertension</span></div></div></div></div></div>
+          <div id="r-other" class="tab-panel" style="padding-top:4px"><div class="empty-state"><div class="empty-state-icon">📂</div><div class="empty-state-title">No other documents</div><div class="empty-state-body">No uncategorized documents found.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder when nothing selected -->
+    <div class="detail-col" id="detail-empty">
+      <div class="card" style="height:100%">
+        <div class="empty-state" style="height:100%">
+          <div class="empty-state-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="empty-state-title">Select a search</div>
+          <div class="empty-state-body">Click a search from the list to view the results and patient records.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-searches -->
+
+  <!-- ── PATIENTS PAGE ── -->
+  <div class="panel-area" id="page-patients" style="display:none">
+    <div class="list-col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">Patients</div>
+        </div>
+        <div class="search-input-wrap">
+          <div class="search-input-inner">
+            <svg class="search-input-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input-field" placeholder="Any name…">
+          </div>
+        </div>
+        <div style="padding:8px 14px 4px;font-size:11px;color:var(--text-3);font-weight:500">13 patients</div>
+        <div class="card-body">
+          <div class="list-item" onclick="openDetail('redesign')">
+            <div class="patient-avatar sm">BT</div>
+            <div class="list-item-body"><div class="list-item-name">Barbara Tan</div><div class="list-item-meta mono">05/04/1985 · MRN-XID7TG</div></div>
+          </div>
+          <div class="list-item" onclick="openDetail('redesign')">
+            <div class="patient-avatar sm">RT</div>
+            <div class="list-item-body"><div class="list-item-name">Robert Tan</div><div class="list-item-meta mono">02/14/1946 · MRN-6WYS1T</div></div>
+          </div>
+          <div class="list-item" onclick="openDetail('redesign')">
+            <div class="patient-avatar sm">ST</div>
+            <div class="list-item-body"><div class="list-item-name">Steven Tan</div><div class="list-item-meta mono">11/11/1999 · MRN-WY8MWN</div></div>
+          </div>
+          <div class="list-item" onclick="openDetail('redesign')">
+            <div class="patient-avatar sm">RJ</div>
+            <div class="list-item-body"><div class="list-item-name">Robert Jones</div><div class="list-item-meta mono">07/18/1987 · MRN-5G47K0</div></div>
+          </div>
+          <div class="list-item" onclick="openDetail('redesign')">
+            <div class="patient-avatar sm">HG</div>
+            <div class="list-item-body"><div class="list-item-name">Hugh Grant</div><div class="list-item-meta mono">11/11/1999 · MRN-7L0K1Y</div></div>
+          </div>
+          <div class="list-item" onclick="openDetail('redesign')">
+            <div class="patient-avatar sm">JH</div>
+            <div class="list-item-body"><div class="list-item-name">James Ho</div><div class="list-item-meta mono">11/23/1956 · MRN-DVYN0B</div></div>
+          </div>
+          <div class="list-item" onclick="openDetail('redesign')">
+            <div class="patient-avatar sm">LD</div>
+            <div class="list-item-body"><div class="list-item-name">Linda Doe</div><div class="list-item-meta mono">12/17/1964 · MRN-XIYAQH</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-col" id="patients-detail-empty">
+      <div class="card" style="height:100%">
+        <div class="empty-state" style="height:100%">
+          <div class="empty-state-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="empty-state-title">Select a patient</div>
+          <div class="empty-state-body">Click a patient to view their records.</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-col" id="patients-detail-panel" style="display:none">
+      <!-- same redesign panel content reused -->
+      <div class="card" style="height:100%">
+        <div style="display:flex;align-items:flex-start;gap:0;padding:12px 14px 0">
+          <button class="icon-btn" onclick="closePatientsDetail()" style="margin-right:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <div class="patient-avatar lg">ST</div>
+          <div style="flex:1;min-width:0;margin-left:12px">
+            <div style="font-size:18px;font-weight:700;color:var(--text)">Steven Tan</div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;margin-top:4px;font-size:12px;color:var(--text-2)">
+              <span><span style="color:var(--text-3)">DOB </span>11/11/1999</span>
+              <span><span style="color:var(--text-3)">MRN </span><span style="font-family:var(--fm)">MRN-WY8MWN</span></span>
+            </div>
+          </div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+        <div class="tabs">
+          <button class="tab active">All <span class="tab-count">11</span></button>
+          <button class="tab">Labs <span class="tab-count">4</span></button>
+          <button class="tab">Imaging <span class="tab-count">3</span></button>
+          <button class="tab">Pathology <span class="tab-count">2</span></button>
+          <button class="tab">History</button>
+          <button class="tab">Discharge</button>
+          <button class="tab">Medications</button>
+          <button class="tab">Other</button>
+        </div>
+        <div class="card-body card-body-padded" style="padding-top:12px">
+          <div class="doc-card">
+            <div class="doc-card-header"><div class="doc-cat-icon labs">🧪</div><div class="doc-card-title-area"><div class="doc-card-title">CBC — Complete Blood Count</div><div class="doc-card-source">Labs · SMH Hospital</div></div><div class="doc-card-date" style="margin-right:8px">01/01/2026</div><div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div>
+            <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Hemoglobin</span><span class="doc-field-value flagged-H">12.9 g/dL <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">WBC</span><span class="doc-field-value">9.4 × 10⁹/L</span></div><div class="doc-field"><span class="doc-field-label">Hematocrit</span><span class="doc-field-value">38.2%</span></div><div class="doc-field"><span class="doc-field-label">Platelets</span><span class="doc-field-value">210 × 10⁹/L</span></div></div></div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-card-header"><div class="doc-cat-icon imaging">🔬</div><div class="doc-card-title-area"><div class="doc-card-title">Mammogram — Bilateral Screening</div><div class="doc-card-source">Imaging · Doctors Hospital</div></div><div class="doc-card-date" style="margin-right:8px">01/25/2026</div><div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div>
+            <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">BI-RADS</span><span class="doc-field-value" style="color:var(--warn);font-weight:600">Category 3</span></div><div class="doc-field"><span class="doc-field-label">Finding</span><span class="doc-field-value">1.2 cm mass</span></div><div class="doc-field"><span class="doc-field-label">Location</span><span class="doc-field-value">R breast, 2 o'clock</span></div></div><div class="doc-tags"><span class="doc-tag negative">Left breast clear</span><span class="doc-tag">6-mo follow-up</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app-shell -->
+
+<!-- NEW SEARCH MODAL -->
+<div class="modal-backdrop" id="modalOverlay" style="display:none" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">New Patient Search</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">First Name <span class="form-label-required">*</span></label>
+          <input class="form-input" placeholder="Jane">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name <span class="form-label-required">*</span></label>
+          <input class="form-input" placeholder="Smith">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date of Birth <span class="form-label-required">*</span></label>
+        <input class="form-input" type="date" style="font-family:var(--fm)">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">Phone <span class="form-label-optional">(optional)</span></label>
+          <input class="form-input" placeholder="(555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ZIP Code <span class="form-label-optional">(optional)</span></label>
+          <input class="form-input" placeholder="90210">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-cta" onclick="closeModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Run Search
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── State ──────────────────────────────────────────
+  let currentPage = 'searches';
+  let sidebarCollapsed = false;
+
+  // ── Page navigation ────────────────────────────────
+  function goTo(page) {
+    currentPage = page;
+
+    document.getElementById('page-login').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    document.getElementById('page-searches').style.display = 'none';
+    document.getElementById('page-patients').style.display = 'none';
+
+    document.querySelectorAll('.sidebar-nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+
+    if (page === 'login') {
+      document.getElementById('page-login').style.display = 'block';
+      document.getElementById('app').style.display = 'none';
+    } else if (page === 'searches') {
+      document.getElementById('page-searches').style.display = 'flex';
+      document.getElementById('nav-searches')?.classList.add('active');
+    } else if (page === 'patients') {
+      document.getElementById('page-patients').style.display = 'flex';
+      document.getElementById('nav-patients')?.classList.add('active');
+    }
+
+    // Sync demo bar
+    document.querySelectorAll('.demo-btn').forEach(b => {
+      if (b.getAttribute('onclick')?.includes(`'${page}'`)) b.classList.add('active');
+    });
+  }
+
+  // ── Detail panel ────────────────────────────────────
+  function openDetail(style) {
+    // hide all detail panels
+    document.getElementById('detail-empty').style.display = 'none';
+    document.getElementById('detail-current').style.display = 'none';
+    document.getElementById('detail-redesign').style.display = 'none';
+    // show chosen
+    document.getElementById('detail-' + style).style.display = 'flex';
+    // sync demo bar
+    document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+    if (style === 'current') {
+      document.querySelectorAll('.demo-btn')[3]?.classList.add('active');
+    } else if (style === 'redesign') {
+      document.querySelectorAll('.demo-btn')[4]?.classList.add('active');
+    }
+    goTo('searches');
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-current').style.display = 'none';
+    document.getElementById('detail-redesign').style.display = 'none';
+    document.getElementById('detail-empty').style.display = 'flex';
+    document.querySelectorAll('.demo-btn').forEach(b => {
+      if (b.getAttribute('onclick')?.includes("'searches'")) b.classList.add('active');
+    });
+  }
+
+  function closePatientsDetail() {
+    document.getElementById('patients-detail-panel').style.display = 'none';
+    document.getElementById('patients-detail-empty').style.display = 'flex';
+    document.querySelectorAll('.list-item').forEach(i => i.classList.remove('selected'));
+  }
+
+  // Override patient list clicks
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#page-patients .list-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.getElementById('patients-detail-empty').style.display = 'none';
+        document.getElementById('patients-detail-panel').style.display = 'flex';
+        document.querySelectorAll('#page-patients .list-item').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+      });
+    });
+  });
+
+  // ── Tabs (current style) ───────────────────────────
+  function switchTab(btn, id) {
+    btn.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ── Tabs (redesign style) ──────────────────────────
+  function switchTabR(btn, panelId) {
+    btn.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#detail-redesign .tab-panel').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(panelId);
+    if (target) target.classList.add('active');
+  }
+
+  // ── Sidebar collapse ──────────────────────────────
+  function toggleSidebar() {
+    sidebarCollapsed = !sidebarCollapsed;
+    const sidebar = document.getElementById('sidebar');
+    const icon = document.getElementById('collapseIcon');
+    sidebar.classList.toggle('collapsed', sidebarCollapsed);
+    icon.querySelector('polyline').setAttribute('points', sidebarCollapsed ? '9 18 15 12 9 6' : '15 18 9 12 15 6');
+  }
+
+  // ── Modal ─────────────────────────────────────────
+  function openModal() {
+    document.getElementById('modalOverlay').style.display = 'flex';
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  // ── Keyboard shortcuts ────────────────────────────
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal() }
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ── Init ─────────────────────────────────────────
+  goTo('searches');
+</script>
+</body>
+</html>
