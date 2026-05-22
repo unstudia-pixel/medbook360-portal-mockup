@@ -173,31 +173,40 @@
   .sidebar-nav-item.active .sidebar-nav-item-count { color: rgba(255,255,255,.75); background: rgba(255,255,255,.14) }
 
   /* Pre-footer (settings) */
-  .sidebar-pre-footer { flex-shrink: 0; padding: 0 10px 4px }
-  .sidebar.collapsed .sidebar-pre-footer { justify-content: center; padding: 0 0 4px; display: flex }
+  .sidebar-pre-footer {
+    flex-shrink: 0; padding: 4px 10px 6px;
+    border-top: 1px solid rgba(255,255,255,.06);
+    margin-top: 2px;
+  }
+  .sidebar.collapsed .sidebar-pre-footer { justify-content: center; padding: 4px 0 6px; display: flex }
   .sidebar.collapsed .sidebar-pre-footer .sidebar-nav-item { justify-content: center; gap: 0; width: 34px; padding: 0 }
+  /* Utility items slightly more muted than primary nav */
+  .sidebar-pre-footer .sidebar-nav-item { color: rgba(255,255,255,.35); font-size: 12.5px }
+  .sidebar-pre-footer .sidebar-nav-item:hover { color: rgba(255,255,255,.65) }
 
   /* Footer */
   .sidebar-footer {
     border-top: 1px solid rgba(255,255,255,.06);
-    flex-shrink: 0; align-items: center; gap: 8px;
-    min-width: 0; padding: 10px 12px; display: flex;
+    flex-shrink: 0; align-items: center; gap: 9px;
+    min-width: 0; padding: 9px 12px 11px; display: flex;
   }
   .sidebar-footer-avatar {
-    color: #c4d9ff;
-    background: oklch(52% .22 252 / .35);
-    border: 1px solid oklch(52% .22 252 / .55);
-    border-radius: 50%; flex-shrink: 0;
+    color: rgba(255,255,255,.9);
+    background: oklch(38% .16 252 / .7);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px; flex-shrink: 0;
     justify-content: center; align-items: center;
-    width: 26px; height: 26px;
-    font-family: var(--ff); font-size: 11px; font-weight: 600;
+    width: 28px; height: 28px;
+    font-family: var(--ff); font-size: 11px; font-weight: 700;
     display: flex;
   }
+  .sidebar-footer-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px }
+  .sidebar-footer-name { color: rgba(255,255,255,.75); font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
   .sidebar-footer-email {
-    color: rgba(255,255,255,.5);
+    color: rgba(255,255,255,.35);
     white-space: nowrap; text-overflow: ellipsis;
     flex: 1; min-width: 0; overflow: hidden;
-    font-size: 13px;
+    font-size: 11px;
   }
   .sidebar-collapse-btn {
     cursor: pointer; color: var(--text-3);
@@ -384,7 +393,7 @@
   }
   .patient-avatar.sm { width: 32px; height: 32px }
   .patient-avatar.md { width: 40px; height: 40px; font-size: 14px }
-  .patient-avatar.lg { border-radius: 14px; width: 52px; height: 52px; font-size: 18px }
+  .patient-avatar.lg { border-radius: 10px; width: 42px; height: 42px; font-size: 15px }
 
   /* Match meter */
   .match-meter { flex-direction: column; gap: 4px; min-width: 80px; display: flex }
@@ -787,18 +796,19 @@
     display: flex; align-items: center; justify-content: center;
   }
   .sidebar-logo-mark svg { color: #fff }
-  .patient-avatar { background: var(--brand-gradient) !important }
+  .patient-avatar { background: oklch(36% .14 248) !important }
 
   /* ── Sidebar label opacity on collapse ── */
   .sidebar-nav-label, .sidebar-new-search-label, .sidebar-new-search-kbd,
-  .sidebar-nav-item-count, .sidebar-footer-email {
+  .sidebar-nav-item-count, .sidebar-footer-email, .sidebar-footer-info {
     transition: opacity .15s ease-out;
   }
   .sidebar.collapsed .sidebar-nav-label,
   .sidebar.collapsed .sidebar-new-search-label,
   .sidebar.collapsed .sidebar-new-search-kbd,
   .sidebar.collapsed .sidebar-nav-item-count,
-  .sidebar.collapsed .sidebar-footer-email { opacity: 0 }
+  .sidebar.collapsed .sidebar-footer-email,
+  .sidebar.collapsed .sidebar-footer-info { opacity: 0 }
 
   /* ── Panel slide-in animation ── */
   @keyframes panel-slide-in { from { opacity:0; transform:translateX(10px) } to { opacity:1; transform:translateX(0) } }
@@ -1011,7 +1021,10 @@
 
     <div class="sidebar-footer">
       <div class="sidebar-footer-avatar">C</div>
-      <span class="sidebar-footer-email">coordinator@specode.ai</span>
+      <div class="sidebar-footer-info">
+        <span class="sidebar-footer-name">Coordinator</span>
+        <span class="sidebar-footer-email">coordinator@specode.ai</span>
+      </div>
       <button class="sidebar-collapse-btn" onclick="toggleSidebar()" title="Collapse sidebar">
         <svg id="collapseIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
