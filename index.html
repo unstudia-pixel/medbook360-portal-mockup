@@ -30,7 +30,7 @@
     --text-2: #4a5a72;
     --text-3: #7c8aa0;
 
-    --ok:   oklch(50% .20 152);   /* green  */
+    --ok:   oklch(48% .26 152);   /* green  */
     --warn: oklch(64% .20 68);    /* amber  */
     --bad:  oklch(50% .24 25);    /* red    */
 
@@ -76,21 +76,21 @@
     top: calc(var(--margin) + 17px);
     left: calc(var(--margin) + var(--sidebar-w));
     width: 18px; height: 38px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
+    background: oklch(15% .035 240);
+    border: 1px solid rgba(255,255,255,.07);
     border-left: none;
     border-radius: 0 8px 8px 0;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    color: var(--text-3);
-    box-shadow: 4px 0 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.08);
+    color: rgba(255,255,255,.45);
+    box-shadow: 4px 0 12px rgba(0,0,0,.22), 0 1px 3px rgba(0,0,0,.12);
     transition: left .2s ease-out, color .12s, background .12s, box-shadow .12s;
     z-index: 20; padding: 0;
   }
   .sidebar-toggle-tab:hover {
-    color: var(--cyan-600);
-    background: var(--bg-surface);
-    box-shadow: 4px 0 16px rgba(0,0,0,.15), 0 1px 4px rgba(0,0,0,.1);
+    color: rgba(255,255,255,.85);
+    background: oklch(19% .04 240);
+    box-shadow: 4px 0 16px rgba(0,0,0,.28), 0 1px 4px rgba(0,0,0,.14);
   }
   .sidebar-toggle-tab svg { transition: transform .2s ease-out }
   #sidebar.collapsed ~ .sidebar-toggle-tab {
@@ -116,6 +116,45 @@
   }
   .sidebar.collapsed { width: var(--sidebar-w-collapsed) }
 
+  /* ═══════════════════════════════════════════════════════
+     COLLAPSED STATE — single authoritative block
+  ═══════════════════════════════════════════════════════ */
+
+  /* Logo row */
+  .sidebar.collapsed .sidebar-logo          { justify-content: center; padding: 0 }
+  .sidebar.collapsed .sidebar-logo-full     { display: none }
+  .sidebar.collapsed .sidebar-logo-collapsed{ display: block }
+
+  /* New Search — square icon button */
+  .sidebar.collapsed .sidebar-new-search    { display: flex; justify-content: center; align-items: center; padding: 8px 0 4px }
+  .sidebar.collapsed .sidebar-new-search-btn{ width: 36px !important; height: 36px !important; padding: 0 !important;
+                                               justify-content: center !important; border-radius: 8px !important;
+                                               flex-shrink: 0 !important; gap: 0 !important }
+  .sidebar.collapsed .sidebar-new-search-label,
+  .sidebar.collapsed .sidebar-new-search-spacer,
+  .sidebar.collapsed .sidebar-new-search-kbd { display: none !important }
+
+  /* Nav items — square icon buttons */
+  .sidebar.collapsed .sidebar-nav           { align-items: center; padding: 4px 0 8px }
+  .sidebar.collapsed .sidebar-nav-item      { width: 34px !important; height: 34px !important; padding: 0 !important;
+                                               justify-content: center !important; border-radius: 8px !important;
+                                               flex-shrink: 0 !important; gap: 0 !important }
+  .sidebar.collapsed .sidebar-nav-item.active { background: rgba(255,255,255,.11); box-shadow: none }
+  .sidebar.collapsed .sidebar-nav-icon      { width: 15px; height: 15px }
+  .sidebar.collapsed .sidebar-nav-label,
+  .sidebar.collapsed .sidebar-nav-item-count{ display: none !important }
+
+  /* Pre-footer */
+  .sidebar.collapsed .sidebar-pre-footer                 { display: flex; justify-content: center; padding: 2px 0 }
+  .sidebar.collapsed .sidebar-pre-footer .sidebar-nav-item{ width: 34px !important; justify-content: center !important;
+                                                             padding: 0 !important; gap: 0 !important }
+
+  /* Footer — gear on top, avatar below */
+  .sidebar.collapsed .sidebar-footer         { flex-direction: column; justify-content: center; align-items: center; gap: 6px; padding: 10px 0 12px }
+  .sidebar.collapsed .sidebar-footer-info    { display: none !important }
+  .sidebar.collapsed .sidebar-footer-icon-btn{ display: flex !important; opacity: 1 !important; pointer-events: auto !important;
+                                                order: -1; width: 28px; height: 28px; color: rgba(255,255,255,.5) }
+
   /* Logo */
   .sidebar-logo {
     border-bottom: 1px solid rgba(255,255,255,.06);
@@ -126,30 +165,28 @@
     padding: 0 16px;
     display: flex;
     overflow: hidden;
+    transition: padding .2s ease-out;
   }
   .sidebar-logo-full {
     display: block;
-    height: 28px;
-    width: 106px; /* 28 × 727/192 */
+    height: 34px;
+    width: 129px; /* 34 × 727/192 */
     flex-shrink: 0;
-    background: rgba(255,255,255,.78);
+    background: linear-gradient(120deg, oklch(82% .20 252) 0%, oklch(78% .18 180) 100%);
     -webkit-mask: url(logo.svg) no-repeat center / contain;
     mask: url(logo.svg) no-repeat center / contain;
   }
-  .sidebar.collapsed .sidebar-logo-full { display: none }
   .sidebar-logo-collapsed {
     display: none;
-    width: 28px; height: 28px; flex-shrink: 0;
-    background: oklch(42% .16 252);
-    border-radius: 8px;
-    align-items: center; justify-content: center;
-    color: #fff; font-family: var(--ff); font-size: 13px; font-weight: 700;
+    width: 34px; height: 34px; flex-shrink: 0;
+    background: linear-gradient(120deg, oklch(82% .20 252) 0%, oklch(78% .18 180) 100%);
+    border-radius: 9px;
+    flex-shrink: 0;
+    -webkit-mask: url(logo-icon.svg) no-repeat center / contain;
+    mask: url(logo-icon.svg) no-repeat center / contain;
   }
-  .sidebar.collapsed .sidebar-logo-collapsed { display: flex }
-
   /* New Search CTA */
   .sidebar-new-search { flex-shrink: 0; padding: 8px 10px 4px }
-  .sidebar.collapsed .sidebar-new-search { justify-content: center; padding: 8px 0 4px; display: flex }
   .sidebar-new-search-btn {
     background: var(--cyan-600);
     box-shadow: 0 1px 4px rgba(0,0,0,.2);
@@ -162,7 +199,6 @@
     transition: opacity .12s ease-out;
     display: flex; overflow: hidden;
   }
-  .sidebar.collapsed .sidebar-new-search-btn { justify-content: center; width: 36px; padding: 0 }
   .sidebar-new-search-btn:hover { opacity: .88 }
   .sidebar-new-search-label { flex: none }
   .sidebar-new-search-spacer { flex: 1 }
@@ -178,7 +214,6 @@
     gap: 2px; padding: 4px 10px 8px;
     display: flex; overflow: hidden auto;
   }
-  .sidebar.collapsed .sidebar-nav { align-items: center; padding: 4px 0 8px }
   .sidebar-nav-item {
     cursor: pointer; color: rgba(255,255,255,.45);
     white-space: nowrap;
@@ -190,12 +225,11 @@
     transition: color .12s ease-out, background .12s ease-out;
     display: flex; border: none;
   }
-  .sidebar.collapsed .sidebar-nav-item { justify-content: center; gap: 0; width: 34px; padding: 0 }
   .sidebar-nav-item:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.07) }
   .sidebar-nav-item.active {
     color: #fff;
-    background: rgba(255,255,255,.12);
-    box-shadow: inset 3px 0 0 #00c4a8;
+    background: rgba(255,255,255,.11);
+    box-shadow: none;
   }
   .sidebar-nav-icon { flex-shrink: 0; width: 15px; height: 15px }
   .sidebar-nav-label { white-space: nowrap; flex: 1; overflow: hidden }
@@ -205,14 +239,12 @@
     border-radius: 10px; margin-left: auto;
     padding: 1px 7px; font-size: 11px; font-weight: 600; line-height: 18px;
   }
-  .sidebar-nav-item.active .sidebar-nav-item-count { color: rgba(255,255,255,.75); background: rgba(255,255,255,.14) }
+  .sidebar-nav-item.active .sidebar-nav-item-count { color: rgba(255,255,255,.85); background: rgba(255,255,255,.14) }
 
   /* Pre-footer — only Org Admin SOON, minimal */
   .sidebar-pre-footer {
     flex-shrink: 0; padding: 2px 10px 2px;
   }
-  .sidebar.collapsed .sidebar-pre-footer { justify-content: center; padding: 2px 0; display: flex }
-  .sidebar.collapsed .sidebar-pre-footer .sidebar-nav-item { justify-content: center; gap: 0; width: 34px; padding: 0 }
   .sidebar-pre-footer .sidebar-nav-item { color: rgba(255,255,255,.22); font-size: 11.5px; height: 30px }
   .sidebar-pre-footer .sidebar-nav-item:hover { color: rgba(255,255,255,.22) }
 
@@ -221,6 +253,7 @@
     border-top: 1px solid rgba(255,255,255,.07);
     flex-shrink: 0; align-items: center; gap: 8px;
     min-width: 0; padding: 10px 12px 12px; display: flex;
+    transition: padding .2s ease-out;
   }
   .sidebar-footer-avatar {
     color: #fff;
@@ -234,13 +267,13 @@
   .sidebar-footer-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px }
   .sidebar-footer-name { color: rgba(255,255,255,.82); font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
   .sidebar-footer-email {
-    color: rgba(255,255,255,.32);
+    color: rgba(255,255,255,.55);
     white-space: nowrap; text-overflow: ellipsis;
     min-width: 0; overflow: hidden;
     font-size: 10.5px;
   }
   .sidebar-footer-icon-btn {
-    cursor: pointer; color: rgba(255,255,255,.28);
+    cursor: pointer; color: rgba(255,255,255,.55);
     background: none; border: none; border-radius: 6px;
     flex-shrink: 0; display: flex;
     width: 28px; height: 28px;
@@ -352,9 +385,9 @@
     border-color: oklch(58% .22 252 / .30);
   }
   .status-pill.succeeded  {
-    color: oklch(28% .22 152);
-    background: oklch(52% .22 152 / .12);
-    border-color: oklch(48% .22 152 / .30);
+    color: oklch(30% .28 152);
+    background: oklch(55% .26 152 / .15);
+    border-color: oklch(50% .28 152 / .40);
   }
   .status-pill.failed     {
     color: oklch(34% .26 25);
@@ -818,17 +851,6 @@
   :root { --brand-gradient: linear-gradient(135deg, #2b80ff 0%, #00c4a8 100%) }
   .patient-avatar { background: oklch(42% .16 252) !important }
 
-  /* ── Sidebar label opacity on collapse ── */
-  .sidebar-nav-label, .sidebar-new-search-label, .sidebar-new-search-kbd,
-  .sidebar-nav-item-count, .sidebar-footer-email, .sidebar-footer-info {
-    transition: opacity .15s ease-out;
-  }
-  .sidebar.collapsed .sidebar-nav-label,
-  .sidebar.collapsed .sidebar-new-search-label,
-  .sidebar.collapsed .sidebar-new-search-kbd,
-  .sidebar.collapsed .sidebar-nav-item-count,
-  .sidebar.collapsed .sidebar-footer-email,
-  .sidebar.collapsed .sidebar-footer-info { opacity: 0 }
 
   /* ── Panel slide-in animation ── */
   @keyframes panel-slide-in { from { opacity:0; transform:translateX(10px) } to { opacity:1; transform:translateX(0) } }
@@ -843,18 +865,23 @@
 
   /* ── Patient saved banner ── */
   .patient-saved-banner {
-    display: flex; align-items: center; gap: 6px;
-    padding: 7px 14px; flex-shrink: 0;
-    background: oklch(52% .20 152 / .09);
-    border-bottom: 1px solid oklch(52% .20 152 / .24);
-    font-size: 12px; color: var(--ok);
+    display: flex; align-items: center; gap: 7px;
+    margin: 8px 14px; padding: 6px 8px 6px 10px; flex-shrink: 0;
+    background: oklch(52% .24 152 / .09);
+    border: 1px solid oklch(52% .24 152 / .22);
+    border-radius: 999px;
+    font-size: 11.5px; font-weight: 500; color: var(--ok);
   }
+  .patient-saved-banner svg { flex-shrink: 0 }
   .patient-saved-banner button {
-    margin-left: auto; background: none; border: none; cursor: pointer;
-    font-size: 12px; font-weight: 600; color: var(--cyan-600); font-family: var(--ff);
-    padding: 0; transition: color .12s;
+    margin-left: auto; cursor: pointer; border: none;
+    background: oklch(55% .22 252 / .1);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11px; font-weight: 600; color: var(--cyan-600); font-family: var(--ff);
+    transition: background .12s, color .12s;
   }
-  .patient-saved-banner button:hover { color: var(--cyan-700) }
+  .patient-saved-banner button:hover { background: oklch(55% .22 252 / .18); color: var(--cyan-700) }
 
   /* ── View toggle (tabs/timeline) ── */
   .view-toggle { display:flex; background:var(--bg-app); border:1px solid var(--border); border-radius:6px; padding:2px; gap:2px }
@@ -973,7 +1000,7 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="sidebar-logo-full" role="img" aria-label="MedBook 360"></div>
-      <div class="sidebar-logo-collapsed">M</div>
+      <div class="sidebar-logo-collapsed"></div>
     </div>
 
     <div class="sidebar-new-search">
@@ -1337,7 +1364,7 @@ Ki-67 Proliferation Index: 22%</div>
           Patient record saved to Patients table
           <button onclick="viewPatientFromSearch()">View in Patients →</button>
         </div>
-        <div style="display:flex;align-items:center;justify-content:flex-end;padding:8px 14px 0">
+        <div style="display:flex;align-items:center;justify-content:flex-end;padding:8px 14px 10px">
           <div class="view-toggle">
             <button class="view-toggle-btn active" data-view="tabs" onclick="switchView('tabs')">Tabs</button>
             <button class="view-toggle-btn" data-view="timeline" onclick="switchView('timeline')">Timeline</button>
@@ -1456,7 +1483,7 @@ Ki-67 Proliferation Index: 22%</div>
             <!-- Pathology card -->
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 21h18"/><path d="M14 21v-4a2 2 0 00-2-2H8"/><path d="M10 4v7"/><path d="M7.5 4h5"/><path d="M12.5 4l2.5 7"/></svg></div>
+                <div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="20" height="7" rx="2"/><circle cx="8.5" cy="12.5" r="1.5"/><circle cx="14" cy="12.5" r="1.5"/><path d="M4 9V6M20 9V6M12 9V5"/></svg></div>
                 <div class="doc-card-title-area">
                   <div class="doc-card-title">Core Biopsy — Right Breast</div>
                   <div class="doc-card-source">Pathology · Blake Hospital</div>
@@ -1538,7 +1565,7 @@ Ki-67 Proliferation Index: 22%</div>
           <div id="r-pathology" class="tab-panel" style="padding-top:4px">
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 21h18"/><path d="M14 21v-4a2 2 0 00-2-2H8"/><path d="M10 4v7"/><path d="M7.5 4h5"/><path d="M12.5 4l2.5 7"/></svg></div>
+                <div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="20" height="7" rx="2"/><circle cx="8.5" cy="12.5" r="1.5"/><circle cx="14" cy="12.5" r="1.5"/><path d="M4 9V6M20 9V6M12 9V5"/></svg></div>
                 <div class="doc-card-title-area"><div class="doc-card-title">Core Biopsy — Right Breast</div><div class="doc-card-source">Pathology · Blake Hospital</div></div>
                 <div class="doc-card-date">12/28/2025</div>
               </div>
@@ -1671,7 +1698,7 @@ Ki-67 Proliferation Index: 22%</div>
           </div>
           <div id="p-labs" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M9 3v7.5L5 19a1 1 0 00.9 1.5h12.2a1 1 0 00.9-1.5L15 10.5V3"/><line x1="9.5" y1="14" x2="14.5" y2="14"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">CBC — Complete Blood Count</div><div class="doc-card-source">Labs · SMH Hospital</div></div><div class="doc-card-date">01/01/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Hemoglobin</span><span class="doc-field-value flagged-H">12.9 g/dL <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">WBC</span><span class="doc-field-value">9.4 × 10⁹/L</span></div></div></div></div></div>
           <div id="p-imaging" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon imaging"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Mammogram — Bilateral Screening</div><div class="doc-card-source">Imaging · Doctors Hospital</div></div><div class="doc-card-date">01/25/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">BI-RADS</span><span class="doc-field-value" style="color:var(--warn);font-weight:600">Category 3</span></div><div class="doc-field"><span class="doc-field-label">Finding</span><span class="doc-field-value">1.2 cm mass</span></div></div></div></div></div>
-          <div id="p-pathology" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 21h18"/><path d="M14 21v-4a2 2 0 00-2-2H8"/><path d="M10 4v7"/><path d="M7.5 4h5"/><path d="M12.5 4l2.5 7"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Core Biopsy — Right Breast</div><div class="doc-card-source">Pathology · Blake Hospital</div></div><div class="doc-card-date">12/28/2025</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Diagnosis</span><span class="doc-field-value" style="color:var(--bad);font-weight:700">Invasive Ductal Ca.</span></div><div class="doc-field"><span class="doc-field-label">ER</span><span class="doc-field-value flagged-H">Positive 90% <span class="flag flag-H">+</span></span></div></div><div class="doc-tags"><span class="doc-tag positive">ER+</span><span class="doc-tag positive">PR+</span></div></div></div></div>
+          <div id="p-pathology" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="20" height="7" rx="2"/><circle cx="8.5" cy="12.5" r="1.5"/><circle cx="14" cy="12.5" r="1.5"/><path d="M4 9V6M20 9V6M12 9V5"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Core Biopsy — Right Breast</div><div class="doc-card-source">Pathology · Blake Hospital</div></div><div class="doc-card-date">12/28/2025</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Diagnosis</span><span class="doc-field-value" style="color:var(--bad);font-weight:700">Invasive Ductal Ca.</span></div><div class="doc-field"><span class="doc-field-label">ER</span><span class="doc-field-value flagged-H">Positive 90% <span class="flag flag-H">+</span></span></div></div><div class="doc-tags"><span class="doc-tag positive">ER+</span><span class="doc-tag positive">PR+</span></div></div></div></div>
           <div id="p-history" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon history"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Medical History Summary</div><div class="doc-card-source">History · Tampa General</div></div><div class="doc-card-date">11/15/2025</div></div><div class="doc-card-body"><div class="doc-narrative">Hypertension (2018), well-controlled on lisinopril. Family history of breast cancer (maternal aunt). No prior surgeries. Non-smoker.</div></div></div></div>
           <div id="p-discharge" class="tab-panel"><div class="empty-state"><div class="empty-state-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="empty-state-title">No discharge documents</div><div class="empty-state-body">No documents in this category.</div></div></div>
           <div id="p-medications" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon other"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 10-7-7l-10 10a4.95 4.95 0 107 7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Medication List</div><div class="doc-card-source">Medications · SMH Hospital</div></div><div class="doc-card-date">01/01/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Lisinopril</span><span class="doc-field-value">10mg daily</span></div><div class="doc-field"><span class="doc-field-label">Indication</span><span class="doc-field-value">Hypertension</span></div></div></div></div></div>
@@ -1975,8 +2002,6 @@ Ki-67 Proliferation Index: 22%</div>
   function toggleSidebar() {
     sidebarCollapsed = !sidebarCollapsed;
     document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
-    document.getElementById('collapseIcon').querySelector('polyline')
-      .setAttribute('points', sidebarCollapsed ? '9 18 15 12 9 6' : '15 18 9 12 15 6');
   }
 
   // ── Modal ──────────────────────────────────────────
