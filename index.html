@@ -74,8 +74,8 @@
   ══════════════════════════════════════════════════════ */
   .sidebar {
     width: var(--sidebar-w);
-    background: var(--navy-800);
-    border: 1px solid rgba(255,255,255,.06);
+    background: linear-gradient(175deg, oklch(18% .06 240) 0%, oklch(13% .05 240) 100%);
+    border: 1px solid rgba(255,255,255,.07);
     border-radius: var(--r);
     flex-direction: column;
     flex-shrink: 0;
@@ -83,7 +83,7 @@
     transition: width .2s ease-out;
     display: flex;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.16);
   }
   .sidebar.collapsed { width: var(--sidebar-w-collapsed) }
 
@@ -116,18 +116,19 @@
   .sidebar-new-search { flex-shrink: 0; padding: 8px 10px 4px }
   .sidebar.collapsed .sidebar-new-search { justify-content: center; padding: 8px 0 4px; display: flex }
   .sidebar-new-search-btn {
-    background: var(--cyan-600);
+    background: linear-gradient(130deg, #00c4a8 0%, #2b80ff 100%);
+    box-shadow: 0 2px 10px rgba(43,128,255,.3);
     color: #fff; cursor: pointer;
     white-space: nowrap;
     border: none; border-radius: 8px;
     justify-content: flex-start; align-items: center; gap: 7px;
-    width: 100%; height: 34px; padding: 0 10px;
+    width: 100%; height: 36px; padding: 0 10px;
     font-family: var(--ff); font-size: 13px; font-weight: 600;
-    transition: background .12s ease-out;
+    transition: opacity .12s ease-out, box-shadow .12s;
     display: flex; overflow: hidden;
   }
-  .sidebar.collapsed .sidebar-new-search-btn { justify-content: center; width: 34px; padding: 0 }
-  .sidebar-new-search-btn:hover { background: var(--cyan-700) }
+  .sidebar.collapsed .sidebar-new-search-btn { justify-content: center; width: 36px; padding: 0 }
+  .sidebar-new-search-btn:hover { opacity: .9; box-shadow: 0 4px 16px rgba(43,128,255,.45) }
   .sidebar-new-search-label { flex: none }
   .sidebar-new-search-spacer { flex: 1 }
   .sidebar-new-search-kbd {
@@ -155,8 +156,12 @@
     display: flex; border: none;
   }
   .sidebar.collapsed .sidebar-nav-item { justify-content: center; gap: 0; width: 34px; padding: 0 }
-  .sidebar-nav-item:hover,
-  .sidebar-nav-item.active { color: #fff; background: rgba(255,255,255,.1) }
+  .sidebar-nav-item:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.07) }
+  .sidebar-nav-item.active {
+    color: #fff;
+    background: rgba(255,255,255,.12);
+    box-shadow: inset 3px 0 0 #00c4a8;
+  }
   .sidebar-nav-icon { flex-shrink: 0; width: 15px; height: 15px }
   .sidebar-nav-label { white-space: nowrap; flex: 1; overflow: hidden }
   .sidebar-nav-item-count {
@@ -232,11 +237,13 @@
     min-height: 0; display: flex;
     overflow: hidden;
     flex: 1;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
   }
   .card-header {
     border-bottom: 1px solid var(--border);
     flex-shrink: 0; align-items: center; gap: 10px;
     height: 54px; padding: 0 16px; display: flex;
+    background: linear-gradient(180deg, var(--bg-surface) 0%, oklch(98.5% .006 225) 100%);
   }
   .card-header-title {
     color: var(--text);
@@ -253,23 +260,29 @@
   .list-item {
     cursor: pointer;
     border-bottom: 1px solid var(--border);
+    border-left: 3px solid transparent;
     align-items: flex-start; gap: 10px;
-    min-height: 56px; padding: 10px 14px;
-    transition: background .12s ease-out;
+    min-height: 58px; padding: 10px 14px 10px 11px;
+    transition: background .12s ease-out, border-left-color .12s;
     display: flex;
   }
   .list-item:last-child { border-bottom: none }
+  .list-item:has(.status-pill.running)    { border-left-color: var(--warn) }
+  .list-item:has(.status-pill.succeeded)  { border-left-color: var(--ok) }
+  .list-item:has(.status-pill.failed)     { border-left-color: var(--bad) }
+  .list-item:has(.status-pill.no-results) { border-left-color: var(--border) }
   .list-item:hover { background: var(--bg-hover) }
-  .list-item.selected { background: var(--bg-selected) }
+  .list-item.selected { background: oklch(93.5% .028 222) }
+  .list-item.selected .list-item-name { color: oklch(42% .14 222) }
   .list-item-body { flex: 1; min-width: 0 }
   .list-item-name {
     color: var(--text); white-space: nowrap;
-    text-overflow: ellipsis; margin-bottom: 2px;
-    font-size: 13px; font-weight: 500; overflow: hidden;
+    text-overflow: ellipsis; margin-bottom: 3px;
+    font-size: 14px; font-weight: 600; overflow: hidden;
   }
   .list-item-meta {
     color: var(--text-2); white-space: nowrap;
-    text-overflow: ellipsis; font-size: 12px; overflow: hidden;
+    text-overflow: ellipsis; font-size: 11.5px; overflow: hidden;
   }
   .list-item-side {
     flex-direction: column; flex-shrink: 0;
@@ -285,16 +298,29 @@
   ══════════════════════════════════════════════════════ */
   .status-pill {
     white-space: nowrap; border-radius: 99px;
-    align-items: center; gap: 4px;
-    padding: 1px 6px 1px 5px;
-    font-size: 11px; font-weight: 500; display: inline-flex;
+    align-items: center; gap: 5px;
+    padding: 2px 9px 2px 6px;
+    font-size: 11px; font-weight: 600; display: inline-flex;
+    border: 1px solid transparent;
   }
   .status-dot { border-radius: 50%; flex-shrink: 0; width: 6px; height: 6px }
-  .status-pill.running    { color: oklch(50% .14 75);  background: oklch(70% .14 75 / .12) }
-  .status-pill.succeeded  { color: oklch(42% .13 155); background: oklch(58% .13 155 / .1) }
-  .status-pill.failed     { color: oklch(42% .18 25);  background: oklch(58% .18 25 / .1)  }
-  .status-pill.cancelled  { color: var(--text-3);      background: #dce2e6 }
-  .status-pill.no-results { color: var(--text-3);      background: #dce2e6 }
+  .status-pill.running    {
+    color: oklch(40% .16 60);
+    background: oklch(75% .16 75 / .18);
+    border-color: oklch(70% .16 75 / .35);
+  }
+  .status-pill.succeeded  {
+    color: oklch(30% .14 155);
+    background: oklch(58% .15 155 / .14);
+    border-color: oklch(55% .15 155 / .3);
+  }
+  .status-pill.failed     {
+    color: oklch(35% .2 20);
+    background: oklch(60% .2 20 / .12);
+    border-color: oklch(58% .2 20 / .28);
+  }
+  .status-pill.cancelled  { color: var(--text-2); background: oklch(91% .005 230); border-color: var(--border) }
+  .status-pill.no-results { color: var(--text-2); background: oklch(91% .005 230); border-color: var(--border) }
   .status-pill.running   .status-dot { background: var(--warn); animation: 1.6s ease-in-out infinite status-pulse }
   .status-pill.succeeded .status-dot { background: var(--ok) }
   .status-pill.failed    .status-dot { background: var(--bad) }
@@ -461,11 +487,13 @@
     background: var(--bg-surface);
     margin: 0 0 10px;
     overflow: hidden;
-    transition: box-shadow .15s ease-out, border-color .15s ease-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.04);
+    transition: box-shadow .15s ease-out, border-color .15s ease-out, transform .12s;
   }
   .doc-card:hover {
-    border-color: oklch(58% .12 220 / .4);
-    box-shadow: 0 0 0 3px oklch(58% .12 220 / .06);
+    border-color: oklch(58% .16 222 / .45);
+    box-shadow: 0 4px 14px rgba(43,128,255,.1), 0 1px 3px rgba(0,0,0,.06);
+    transform: translateY(-1px);
   }
   .doc-card-header {
     display: flex; align-items: center; gap: 10px;
@@ -474,15 +502,16 @@
     background: var(--bg-surface-secondary);
   }
   .doc-cat-icon {
-    width: 28px; height: 28px; border-radius: 7px;
+    width: 30px; height: 30px; border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     font-size: 13px; flex-shrink: 0;
   }
-  .doc-cat-icon.labs     { background: oklch(58% .12 220 / .1) }
-  .doc-cat-icon.imaging  { background: oklch(58% .13 155 / .1) }
-  .doc-cat-icon.path     { background: oklch(70% .14 75 / .12) }
-  .doc-cat-icon.history  { background: oklch(58% .18 25 / .1) }
-  .doc-cat-icon.other    { background: oklch(91% .008 230) }
+  .doc-cat-icon.labs     { background: oklch(58% .2 222 / .14); color: oklch(45% .2 222) }
+  .doc-cat-icon.imaging  { background: oklch(55% .18 155 / .14); color: oklch(40% .18 155) }
+  .doc-cat-icon.path     { background: oklch(68% .2 75 / .16);   color: oklch(48% .2 75) }
+  .doc-cat-icon.history  { background: oklch(58% .2 25 / .14);   color: oklch(42% .2 25) }
+  .doc-cat-icon.meds     { background: oklch(58% .2 300 / .14);  color: oklch(45% .2 300) }
+  .doc-cat-icon.other    { background: oklch(88% .008 230);       color: var(--text-3) }
   .doc-card-title-area { flex: 1; min-width: 0 }
   .doc-card-title {
     font-size: 13px; font-weight: 600; color: var(--text);
