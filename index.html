@@ -587,7 +587,7 @@
     font-size: 13px; flex-shrink: 0;
   }
   .doc-cat-icon.labs     { background: oklch(55% .22 252 / .12); color: oklch(43% .22 252) }
-  .doc-cat-icon.imaging  { background: oklch(52% .20 152 / .13); color: oklch(38% .20 152) }
+  .doc-cat-icon.imaging  { background: oklch(52% .20 200 / .13); color: oklch(38% .20 200) }
   .doc-cat-icon.path     { background: oklch(66% .22 68 / .16);  color: oklch(44% .22 68) }
   .doc-cat-icon.history  { background: oklch(52% .24 25 / .13);  color: oklch(40% .24 25) }
   .doc-cat-icon.meds     { background: oklch(58% .22 300 / .13); color: oklch(43% .22 300) }
@@ -1933,8 +1933,9 @@ Ki-67 Proliferation Index: 22%</div>
   function hashColor(str) {
     let h = 0;
     for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffffffff;
-    // Constrain to cool arc only: mint → teal → cyan → blue → violet (140–300°)
-    return 140 + ((h >>> 0) % 160);
+    // Knuth multiplicative hash for even distribution across the cool arc (140–300°)
+    const scrambled = Math.imul(h >>> 0, 2654435761) >>> 0;
+    return 140 + (scrambled % 160);
   }
   function applyAvatarColor(el, name) {
     const hue = hashColor(name);
