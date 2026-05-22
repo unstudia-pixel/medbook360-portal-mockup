@@ -743,6 +743,91 @@
   .tab-panel { display: none }
   .tab-panel.active { display: block }
 
+  /* ── Brand gradient ── */
+  :root { --brand-gradient: linear-gradient(135deg, #2b80ff 0%, #00c4a8 100%) }
+  .sidebar-logo-mark {
+    background: var(--brand-gradient);
+    border-radius: 8px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sidebar-logo-mark svg { color: #fff }
+  .patient-avatar { background: var(--brand-gradient) !important }
+
+  /* ── Sidebar label opacity on collapse ── */
+  .sidebar-nav-label, .sidebar-new-search-label, .sidebar-new-search-kbd,
+  .sidebar-nav-item-count, .sidebar-footer-email {
+    transition: opacity .15s ease-out;
+  }
+  .sidebar.collapsed .sidebar-nav-label,
+  .sidebar.collapsed .sidebar-new-search-label,
+  .sidebar.collapsed .sidebar-new-search-kbd,
+  .sidebar.collapsed .sidebar-nav-item-count,
+  .sidebar.collapsed .sidebar-footer-email { opacity: 0 }
+
+  /* ── Panel slide-in animation ── */
+  @keyframes panel-slide-in { from { opacity:0; transform:translateX(10px) } to { opacity:1; transform:translateX(0) } }
+  .detail-col.panel-in { animation: panel-slide-in .2s ease-out forwards }
+
+  /* ── Tab panel fade ── */
+  @keyframes tab-fade-in { from { opacity:0 } to { opacity:1 } }
+  .tab-panel.active { animation: tab-fade-in .15s ease-out }
+
+  /* ── Zero count ── */
+  .tab-count.zero { opacity: .4 }
+
+  /* ── Patient saved banner ── */
+  .patient-saved-banner {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 14px; flex-shrink: 0;
+    background: oklch(58% .13 155 / .08);
+    border-bottom: 1px solid oklch(58% .13 155 / .2);
+    font-size: 12px; color: var(--ok);
+  }
+  .patient-saved-banner button {
+    margin-left: auto; background: none; border: none; cursor: pointer;
+    font-size: 12px; font-weight: 600; color: var(--cyan-600); font-family: var(--ff);
+    padding: 0; transition: color .12s;
+  }
+  .patient-saved-banner button:hover { color: var(--cyan-700) }
+
+  /* ── View toggle (tabs/timeline) ── */
+  .view-toggle { display:flex; background:var(--bg-app); border:1px solid var(--border); border-radius:6px; padding:2px; gap:2px }
+  .view-toggle-btn { border:none; background:none; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:600; color:var(--text-3); cursor:pointer; font-family:var(--ff); transition:all .12s }
+  .view-toggle-btn.active { background:var(--bg-surface); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,.08) }
+
+  /* ── Timeline ── */
+  .timeline { padding: 12px 14px }
+  .timeline-event { display:flex; gap:12px; padding-bottom:16px }
+  .timeline-event:last-child { padding-bottom:0 }
+  .timeline-spine { display:flex; flex-direction:column; align-items:center; flex-shrink:0; width:16px }
+  .timeline-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:5px }
+  .timeline-dot.labs    { background: var(--cyan-600) }
+  .timeline-dot.imaging { background: var(--ok) }
+  .timeline-dot.path    { background: var(--warn) }
+  .timeline-dot.history { background: var(--text-3) }
+  .timeline-dot.meds    { background: oklch(60% .15 300) }
+  .timeline-line { flex:1; width:1px; background:var(--border); margin:4px 0 0 }
+  .timeline-event:last-child .timeline-line { display:none }
+  .timeline-card { flex:1; min-width:0; background:var(--bg-surface-secondary); border:1px solid var(--border); border-radius:8px; padding:9px 12px; transition:border-color .12s,box-shadow .12s; cursor:default }
+  .timeline-card:hover { border-color:oklch(58% .12 220 / .4); box-shadow:0 0 0 3px oklch(58% .12 220 / .06) }
+  .timeline-meta { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:2px }
+  .timeline-title { font-size:13px; font-weight:600; color:var(--text) }
+  .timeline-date  { font-family:var(--fm); font-size:11px; color:var(--text-3); flex-shrink:0; margin-left:8px }
+  .timeline-source { font-size:10.5px; color:var(--text-3); text-transform:uppercase; letter-spacing:.05em; font-weight:600; margin-bottom:5px }
+  .timeline-finding { font-size:12px; color:var(--text-2); font-family:var(--fm) }
+  .timeline-finding.bad  { color:var(--bad);  font-weight:600 }
+  .timeline-finding.warn { color:var(--warn); font-weight:600 }
+
+  /* ── State panels (running/failed/no-results) ── */
+  .state-panel { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:48px 32px; text-align:center }
+  .state-icon-wrap { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0 }
+  .state-icon-wrap.running  { background: oklch(70% .14 75 / .12) }
+  .state-icon-wrap.failed   { background: oklch(58% .18 25 / .1) }
+  .state-icon-wrap.empty    { background: var(--bg-hover) }
+  .state-title { font-size:14px; font-weight:600; color:var(--text) }
+  .state-body  { font-size:12px; color:var(--text-3); max-width:280px; line-height:1.6 }
+
   /* Demo toolbar */
   .demo-bar {
     position: fixed; top: 0; left: 50%; transform: translateX(-50%);
@@ -783,7 +868,7 @@
   <button class="demo-btn" onclick="goTo('patients')">Patients</button>
   <span class="demo-sep">|</span>
   <button class="demo-btn" onclick="openDetail('current')">Current Tab Style</button>
-  <button class="demo-btn" onclick="openDetail('redesign')">✦ Redesigned Tabs</button>
+  <button class="demo-btn" onclick="openDetail('redesign')"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="margin-right:3px;vertical-align:middle"><path d="M12 2l2.09 6.26L21 10l-6.91 1.74L12 18l-2.09-6.26L3 10l6.91-1.74z"/></svg>Redesigned Tabs</button>
 </div>
 
 <!-- ╔══════════════════════════════════════════════╗
@@ -811,7 +896,7 @@
           <label class="form-label">Password</label>
           <input class="form-input" type="password" value="••••••••••">
         </div>
-        <button class="btn btn-primary login-submit" onclick="goTo('searches')">Sign in</button>
+        <button id="login-btn" class="btn btn-primary login-submit" onclick="submitLogin()" style="display:flex;align-items:center;justify-content:center;gap:8px">Sign in</button>
       </div>
     </div>
   </div>
@@ -849,14 +934,19 @@
         <span class="sidebar-nav-label">Searches</span>
         <span class="sidebar-nav-item-count">7</span>
       </button>
-      <button class="sidebar-nav-item" id="nav-patients" onclick="goTo('patients')">
+      <button class="sidebar-nav-item" id="nav-patients" onclick="goTo('patients')" style="margin-bottom:8px">
         <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span class="sidebar-nav-label">Patients</span>
-        <span class="sidebar-nav-item-count">13</span>
+        <span class="sidebar-nav-item-count">7</span>
       </button>
     </nav>
 
-    <div class="sidebar-pre-footer">
+    <div class="sidebar-pre-footer" style="display:flex;flex-direction:column;gap:2px">
+      <div class="sidebar-nav-item" style="opacity:.32;cursor:not-allowed" title="Coming soon — multi-tenancy">
+        <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span class="sidebar-nav-label">Org Admin</span>
+        <span class="sidebar-nav-item-count" style="font-size:9px;padding:1px 5px;letter-spacing:.04em">SOON</span>
+      </div>
       <button class="sidebar-nav-item">
         <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
         <span class="sidebar-nav-label">Settings</span>
@@ -884,8 +974,7 @@
           </button>
         </div>
         <div class="card-body">
-          <!-- Running item -->
-          <div class="list-item" onclick="openDetail('current')">
+          <div class="list-item" onclick="openSearchItem(this,'running')">
             <div class="list-item-body">
               <div class="list-item-name">Alex Johnson</div>
               <div class="list-item-meta mono">DOB 04/15/1957</div>
@@ -895,8 +984,7 @@
               <span style="font-size:11px;color:var(--text-3)">0:42</span>
             </div>
           </div>
-          <!-- Failed -->
-          <div class="list-item" onclick="openDetail('current')">
+          <div class="list-item" onclick="openSearchItem(this,'failed')">
             <div class="list-item-body">
               <div class="list-item-name">Jane Smith</div>
               <div class="list-item-meta mono">DOB 11/11/1999 · 333333333</div>
@@ -906,8 +994,7 @@
               <span style="font-size:11px;color:var(--text-3)">2d ago</span>
             </div>
           </div>
-          <!-- Succeeded -->
-          <div class="list-item selected" onclick="openDetail('current')">
+          <div class="list-item" onclick="openSearchItem(this,'succeeded')">
             <div class="list-item-body">
               <div class="list-item-name">Steven Tan</div>
               <div class="list-item-meta mono">DOB 11/11/1999 · 10001</div>
@@ -917,7 +1004,7 @@
               <span style="font-size:11px;color:var(--text-3)">6d ago</span>
             </div>
           </div>
-          <div class="list-item" onclick="openDetail('current')">
+          <div class="list-item" onclick="openSearchItem(this,'succeeded')">
             <div class="list-item-body">
               <div class="list-item-name">Jim Jones</div>
               <div class="list-item-meta mono">DOB 03/03/1998</div>
@@ -927,7 +1014,7 @@
               <span style="font-size:11px;color:var(--text-3)">6d ago</span>
             </div>
           </div>
-          <div class="list-item" onclick="openDetail('current')">
+          <div class="list-item" onclick="openSearchItem(this,'succeeded')">
             <div class="list-item-body">
               <div class="list-item-name">Hugh Grant</div>
               <div class="list-item-meta mono">DOB 11/11/1999</div>
@@ -937,7 +1024,7 @@
               <span style="font-size:11px;color:var(--text-3)">6d ago</span>
             </div>
           </div>
-          <div class="list-item" onclick="openDetail('current')">
+          <div class="list-item" onclick="openSearchItem(this,'no-results')">
             <div class="list-item-body">
               <div class="list-item-name">Jim Ho</div>
               <div class="list-item-meta mono">DOB 11/11/1988 · 10001</div>
@@ -947,7 +1034,7 @@
               <span style="font-size:11px;color:var(--text-3)">6d ago</span>
             </div>
           </div>
-          <div class="list-item" onclick="openDetail('current')">
+          <div class="list-item" onclick="openSearchItem(this,'succeeded')">
             <div class="list-item-body">
               <div class="list-item-name">Jim Doe</div>
               <div class="list-item-meta mono">DOB 11/11/1999 · 90210</div>
@@ -957,6 +1044,69 @@
               <span style="font-size:11px;color:var(--text-3)">6d ago</span>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Running state panel -->
+    <div class="detail-col" id="detail-running" style="display:none">
+      <div class="card" style="height:100%">
+        <div style="display:flex;align-items:flex-start;gap:0;padding:12px 14px 0">
+          <button class="icon-btn" onclick="closeDetail()" style="margin-right:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <div class="patient-avatar lg">AJ</div>
+          <div style="flex:1;min-width:0;margin-left:12px">
+            <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.015em">Alex Johnson</div>
+            <div style="font-size:12px;color:var(--text-2);margin-top:4px"><span style="color:var(--text-3)">DOB </span>04/15/1957</div>
+          </div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+        <div class="state-panel">
+          <div class="state-icon-wrap running"><div class="search-running-dot"></div></div>
+          <div class="state-title">Search in progress</div>
+          <div class="state-body">Querying 5,000+ hospitals via CommonWell, Carequality, and TEFCA networks…</div>
+          <div class="search-running-elapsed" id="detail-running-elapsed">0:42</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Failed state panel -->
+    <div class="detail-col" id="detail-failed" style="display:none">
+      <div class="card" style="height:100%">
+        <div style="display:flex;align-items:flex-start;gap:0;padding:12px 14px 0">
+          <button class="icon-btn" onclick="closeDetail()" style="margin-right:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <div class="patient-avatar lg">JS</div>
+          <div style="flex:1;min-width:0;margin-left:12px">
+            <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.015em">Jane Smith</div>
+            <div style="font-size:12px;color:var(--text-2);margin-top:4px"><span style="color:var(--text-3)">DOB </span>11/11/1999</div>
+          </div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+        <div class="state-panel">
+          <div class="state-icon-wrap failed"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color:var(--bad)"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+          <div class="state-title">Search failed</div>
+          <div class="state-body">The query timed out after 120 seconds. This may be a network issue with one or more HIE endpoints. Please try running the search again.</div>
+          <button class="btn btn-default btn-compact" onclick="closeDetail()">Retry search</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No results state panel -->
+    <div class="detail-col" id="detail-no-results" style="display:none">
+      <div class="card" style="height:100%">
+        <div style="display:flex;align-items:flex-start;gap:0;padding:12px 14px 0">
+          <button class="icon-btn" onclick="closeDetail()" style="margin-right:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <div class="patient-avatar lg">JH</div>
+          <div style="flex:1;min-width:0;margin-left:12px">
+            <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.015em">Jim Ho</div>
+            <div style="font-size:12px;color:var(--text-2);margin-top:4px"><span style="color:var(--text-3)">DOB </span>11/11/1988 · <span style="font-family:var(--fm)">10001</span></div>
+          </div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+        <div class="state-panel">
+          <div class="state-icon-wrap empty"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:var(--text-3)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <div class="state-title">No candidates found</div>
+          <div class="state-body">No matching patient records were found across connected HIE networks for this demographic. Try broadening the search parameters.</div>
+          <button class="btn btn-default btn-compact" onclick="openModal()">New search</button>
         </div>
       </div>
     </div>
@@ -978,8 +1128,12 @@
           </div>
         </div>
 
-        <!-- Divider -->
         <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+        <div class="patient-saved-banner">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Patient record saved to Patients table
+          <button onclick="viewPatientFromSearch()">View in Patients →</button>
+        </div>
 
         <!-- Tabs (current style) -->
         <div class="tabs">
@@ -988,15 +1142,16 @@
           <button class="tab" onclick="switchTab(this,'imaging')">Imaging <span class="tab-count">3</span></button>
           <button class="tab" onclick="switchTab(this,'pathology')">Pathology <span class="tab-count">2</span></button>
           <button class="tab" onclick="switchTab(this,'history')">History <span class="tab-count">1</span></button>
-          <button class="tab" onclick="switchTab(this,'discharge')">Discharge</button>
+          <button class="tab" onclick="switchTab(this,'discharge')">Discharge <span class="tab-count zero">0</span></button>
           <button class="tab" onclick="switchTab(this,'medications')">Medications <span class="tab-count">1</span></button>
-          <button class="tab" onclick="switchTab(this,'other')">Other</button>
+          <button class="tab" onclick="switchTab(this,'other')">Other <span class="tab-count zero">0</span></button>
         </div>
 
         <!-- Current plain-text document style -->
         <div class="card-body card-body-padded">
           <div class="section-badge">CURRENT STYLE</div>
 
+          <div id="c-all" class="tab-panel active">
           <!-- Doc row 1 - Labs -->
           <div class="document-row">
             <div class="document-header">
@@ -1066,6 +1221,37 @@ Receptor status:
 
 Ki-67 Proliferation Index: 22%</div>
           </div>
+          </div><!-- /c-all -->
+
+          <div id="c-labs" class="tab-panel">
+            <div class="document-row"><div class="document-header"><div style="flex:1;min-width:0"><div class="document-title">CBC — Complete Blood Count</div><div class="document-source">Labs · SMH Hospital</div></div><span class="document-date">01/01/2026</span></div><div class="document-content">Hemoglobin: 12.9 g/dL (H)&#10;WBC: 9.4 x 10^9/L&#10;Platelets: 210 x 10^9/L&#10;Hematocrit: 38.2%</div></div>
+            <div class="document-row"><div class="document-header"><div style="flex:1;min-width:0"><div class="document-title">CMP — Comprehensive Metabolic Panel</div><div class="document-source">Labs · LWR Hospital</div></div><span class="document-date">01/05/2026</span></div><div class="document-content">BUN: 20 mg/dL (H)&#10;ALT: 50 U/L (H)&#10;Creatinine: 0.9 mg/dL&#10;Glucose: 94 mg/dL</div></div>
+          </div>
+
+          <div id="c-imaging" class="tab-panel">
+            <div class="document-row"><div class="document-header"><div style="flex:1;min-width:0"><div class="document-title">Mammogram — Bilateral Screening</div><div class="document-source">Imaging · Doctors Hospital</div></div><span class="document-date">01/25/2026</span></div><div class="document-content">BI-RADS Category 3. 1.2 cm oval mass at 2 o'clock, 5 cm from nipple. Recommend 6-month follow-up ultrasound.</div></div>
+          </div>
+
+          <div id="c-pathology" class="tab-panel">
+            <div class="document-row"><div class="document-header"><div style="flex:1;min-width:0"><div class="document-title">Core Biopsy — Right Breast</div><div class="document-source">Pathology · Blake Hospital</div></div><span class="document-date">12/28/2025</span></div><div class="document-content">DIAGNOSIS: Invasive Ductal Carcinoma, Grade 2&#10;ER: Positive (90%) · PR: Positive (60%) · HER2: 2+ Equivocal · Ki-67: 22%</div></div>
+          </div>
+
+          <div id="c-history" class="tab-panel">
+            <div class="document-row"><div class="document-header"><div style="flex:1;min-width:0"><div class="document-title">Medical History Summary</div><div class="document-source">History · Tampa General</div></div><span class="document-date">11/15/2025</span></div><div class="document-content">Hypertension (2018), controlled on lisinopril. Family history of breast cancer (maternal aunt). No prior surgeries. Non-smoker.</div></div>
+          </div>
+
+          <div id="c-discharge" class="tab-panel">
+            <div class="empty-state"><div class="empty-state-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="empty-state-title">No discharge documents</div><div class="empty-state-body">No documents in this category were found.</div></div>
+          </div>
+
+          <div id="c-medications" class="tab-panel">
+            <div class="document-row"><div class="document-header"><div style="flex:1;min-width:0"><div class="document-title">Medication List</div><div class="document-source">Medications · SMH Hospital</div></div><span class="document-date">01/01/2026</span></div><div class="document-content">Lisinopril 10mg daily — Indication: Hypertension</div></div>
+          </div>
+
+          <div id="c-other" class="tab-panel">
+            <div class="empty-state"><div class="empty-state-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><div class="empty-state-title">No other documents</div><div class="empty-state-body">No uncategorized documents found.</div></div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -1092,29 +1278,40 @@ Ki-67 Proliferation Index: 22%</div>
         </div>
 
         <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
+        <div class="patient-saved-banner">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Patient record saved to Patients table
+          <button onclick="viewPatientFromSearch()">View in Patients →</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;padding:8px 14px 0">
+          <div class="view-toggle">
+            <button class="view-toggle-btn active" data-view="tabs" onclick="switchView('tabs')">Tabs</button>
+            <button class="view-toggle-btn" data-view="timeline" onclick="switchView('timeline')">Timeline</button>
+          </div>
+        </div>
 
-        <!-- Same tabs, same UX -->
-        <div class="tabs">
+        <!-- Tabs row -->
+        <div class="tabs" id="redesign-tabs-row">
           <button class="tab active" onclick="switchTabR(this,'r-all')">All <span class="tab-count">11</span></button>
           <button class="tab" onclick="switchTabR(this,'r-labs')">Labs <span class="tab-count">4</span></button>
           <button class="tab" onclick="switchTabR(this,'r-imaging')">Imaging <span class="tab-count">3</span></button>
           <button class="tab" onclick="switchTabR(this,'r-pathology')">Pathology <span class="tab-count">2</span></button>
           <button class="tab" onclick="switchTabR(this,'r-history')">History <span class="tab-count">1</span></button>
-          <button class="tab" onclick="switchTabR(this,'r-discharge')">Discharge</button>
+          <button class="tab" onclick="switchTabR(this,'r-discharge')">Discharge <span class="tab-count zero">0</span></button>
           <button class="tab" onclick="switchTabR(this,'r-medications')">Medications <span class="tab-count">1</span></button>
-          <button class="tab" onclick="switchTabR(this,'r-other')">Other</button>
+          <button class="tab" onclick="switchTabR(this,'r-other')">Other <span class="tab-count zero">0</span></button>
         </div>
 
         <!-- REDESIGNED content -->
-        <div class="card-body card-body-padded" style="position:relative">
-          <div class="section-badge">✦ REDESIGNED</div>
+        <div class="card-body card-body-padded" style="position:relative" id="redesign-body">
+          <div class="section-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:3px"><path d="M12 2l2.09 6.26L21 10l-6.91 1.74L12 18l-2.09-6.26L3 10l6.91-1.74z"/></svg>REDESIGNED</div>
 
           <div id="r-all" class="tab-panel active" style="padding-top:4px">
 
             <!-- Labs card -->
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon labs">🧪</div>
+                <div class="doc-cat-icon labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M9 3v7.5L5 19a1 1 0 00.9 1.5h12.2a1 1 0 00.9-1.5L15 10.5V3"/><line x1="9.5" y1="14" x2="14.5" y2="14"/></svg></div>
                 <div class="doc-card-title-area">
                   <div class="doc-card-title">CBC — Complete Blood Count</div>
                   <div class="doc-card-source">Labs · SMH Hospital</div>
@@ -1161,7 +1358,7 @@ Ki-67 Proliferation Index: 22%</div>
             <!-- Imaging card -->
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon imaging">🔬</div>
+                <div class="doc-cat-icon imaging"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
                 <div class="doc-card-title-area">
                   <div class="doc-card-title">Mammogram — Bilateral Screening</div>
                   <div class="doc-card-source">Imaging · Doctors Hospital</div>
@@ -1205,7 +1402,7 @@ Ki-67 Proliferation Index: 22%</div>
             <!-- Pathology card -->
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon path">🧬</div>
+                <div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 21h18"/><path d="M14 21v-4a2 2 0 00-2-2H8"/><path d="M10 4v7"/><path d="M7.5 4h5"/><path d="M12.5 4l2.5 7"/></svg></div>
                 <div class="doc-card-title-area">
                   <div class="doc-card-title">Core Biopsy — Right Breast</div>
                   <div class="doc-card-source">Pathology · Blake Hospital</div>
@@ -1254,7 +1451,7 @@ Ki-67 Proliferation Index: 22%</div>
           <div id="r-labs" class="tab-panel" style="padding-top:4px">
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon labs">🧪</div>
+                <div class="doc-cat-icon labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M9 3v7.5L5 19a1 1 0 00.9 1.5h12.2a1 1 0 00.9-1.5L15 10.5V3"/><line x1="9.5" y1="14" x2="14.5" y2="14"/></svg></div>
                 <div class="doc-card-title-area"><div class="doc-card-title">CBC — Complete Blood Count</div><div class="doc-card-source">Labs · SMH Hospital</div></div>
                 <div class="doc-card-date" style="margin-right:8px">01/01/2026</div>
                 <div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div>
@@ -1263,7 +1460,7 @@ Ki-67 Proliferation Index: 22%</div>
             </div>
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon labs">⚗️</div>
+                <div class="doc-cat-icon labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M9 3v7.5L5 19a1 1 0 00.9 1.5h12.2a1 1 0 00.9-1.5L15 10.5V3"/><line x1="9.5" y1="14" x2="14.5" y2="14"/></svg></div>
                 <div class="doc-card-title-area"><div class="doc-card-title">CMP — Comprehensive Metabolic Panel</div><div class="doc-card-source">Labs · LWR Hospital</div></div>
                 <div class="doc-card-date" style="margin-right:8px">01/05/2026</div>
                 <div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div>
@@ -1275,7 +1472,7 @@ Ki-67 Proliferation Index: 22%</div>
           <div id="r-imaging" class="tab-panel" style="padding-top:4px">
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon imaging">🔬</div>
+                <div class="doc-cat-icon imaging"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
                 <div class="doc-card-title-area"><div class="doc-card-title">Mammogram — Bilateral Screening</div><div class="doc-card-source">Imaging · Doctors Hospital</div></div>
                 <div class="doc-card-date" style="margin-right:8px">01/25/2026</div>
                 <div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div>
@@ -1287,7 +1484,7 @@ Ki-67 Proliferation Index: 22%</div>
           <div id="r-pathology" class="tab-panel" style="padding-top:4px">
             <div class="doc-card">
               <div class="doc-card-header">
-                <div class="doc-cat-icon path">🧬</div>
+                <div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 21h18"/><path d="M14 21v-4a2 2 0 00-2-2H8"/><path d="M10 4v7"/><path d="M7.5 4h5"/><path d="M12.5 4l2.5 7"/></svg></div>
                 <div class="doc-card-title-area"><div class="doc-card-title">Core Biopsy — Right Breast</div><div class="doc-card-source">Pathology · Blake Hospital</div></div>
                 <div class="doc-card-date">12/28/2025</div>
               </div>
@@ -1296,12 +1493,43 @@ Ki-67 Proliferation Index: 22%</div>
           </div>
 
           <div id="r-history" class="tab-panel" style="padding-top:4px">
-            <div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon history">📋</div><div class="doc-card-title-area"><div class="doc-card-title">Medical History Summary</div><div class="doc-card-source">History · Tampa General</div></div><div class="doc-card-date">11/15/2025</div></div><div class="doc-card-body"><div class="doc-narrative">Patient reports history of hypertension (diagnosed 2018), well-controlled on lisinopril. Family history of breast cancer (maternal aunt). No prior surgeries. Non-smoker. Social drinker.</div></div></div>
+            <div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon history"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Medical History Summary</div><div class="doc-card-source">History · Tampa General</div></div><div class="doc-card-date">11/15/2025</div></div><div class="doc-card-body"><div class="doc-narrative">Patient reports history of hypertension (diagnosed 2018), well-controlled on lisinopril. Family history of breast cancer (maternal aunt). No prior surgeries. Non-smoker. Social drinker.</div></div></div>
           </div>
-          <div id="r-discharge" class="tab-panel" style="padding-top:4px"><div class="empty-state"><div class="empty-state-icon">📄</div><div class="empty-state-title">No discharge documents</div><div class="empty-state-body">No documents in this category were found for this patient.</div></div></div>
-          <div id="r-medications" class="tab-panel" style="padding-top:4px"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon other">💊</div><div class="doc-card-title-area"><div class="doc-card-title">Medication List</div><div class="doc-card-source">Medications · SMH Hospital</div></div><div class="doc-card-date">01/01/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Lisinopril</span><span class="doc-field-value">10mg daily</span></div><div class="doc-field"><span class="doc-field-label">Indication</span><span class="doc-field-value">Hypertension</span></div></div></div></div></div>
-          <div id="r-other" class="tab-panel" style="padding-top:4px"><div class="empty-state"><div class="empty-state-icon">📂</div><div class="empty-state-title">No other documents</div><div class="empty-state-body">No uncategorized documents found.</div></div></div>
+          <div id="r-discharge" class="tab-panel" style="padding-top:4px"><div class="empty-state"><div class="empty-state-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="empty-state-title">No discharge documents</div><div class="empty-state-body">No documents in this category were found for this patient.</div></div></div>
+          <div id="r-medications" class="tab-panel" style="padding-top:4px"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon other"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 10-7-7l-10 10a4.95 4.95 0 107 7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Medication List</div><div class="doc-card-source">Medications · SMH Hospital</div></div><div class="doc-card-date">01/01/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Lisinopril</span><span class="doc-field-value">10mg daily</span></div><div class="doc-field"><span class="doc-field-label">Indication</span><span class="doc-field-value">Hypertension</span></div></div></div></div></div>
+          <div id="r-other" class="tab-panel" style="padding-top:4px"><div class="empty-state"><div class="empty-state-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><div class="empty-state-title">No other documents</div><div class="empty-state-body">No uncategorized documents found.</div></div></div>
+        </div><!-- /redesign-body -->
+
+        <!-- Timeline view -->
+        <div id="timeline-body" class="card-body" style="display:none">
+          <div class="timeline">
+            <div class="timeline-event">
+              <div class="timeline-spine"><div class="timeline-dot imaging"></div><div class="timeline-line"></div></div>
+              <div class="timeline-card"><div class="timeline-meta"><span class="timeline-title">Mammogram — Bilateral Screening</span><span class="timeline-date">01/25/2026</span></div><div class="timeline-source">Imaging · Doctors Hospital</div><div class="timeline-finding warn">BI-RADS Category 3 — 1.2 cm mass at 2 o'clock</div></div>
+            </div>
+            <div class="timeline-event">
+              <div class="timeline-spine"><div class="timeline-dot labs"></div><div class="timeline-line"></div></div>
+              <div class="timeline-card"><div class="timeline-meta"><span class="timeline-title">CMP — Comprehensive Metabolic Panel</span><span class="timeline-date">01/05/2026</span></div><div class="timeline-source">Labs · LWR Hospital</div><div class="timeline-finding warn">ALT 50 U/L (H) · BUN 20 mg/dL (H)</div></div>
+            </div>
+            <div class="timeline-event">
+              <div class="timeline-spine"><div class="timeline-dot labs"></div><div class="timeline-line"></div></div>
+              <div class="timeline-card"><div class="timeline-meta"><span class="timeline-title">CBC — Complete Blood Count</span><span class="timeline-date">01/01/2026</span></div><div class="timeline-source">Labs · SMH Hospital</div><div class="timeline-finding bad">Hemoglobin 12.9 g/dL (H)</div></div>
+            </div>
+            <div class="timeline-event">
+              <div class="timeline-spine"><div class="timeline-dot meds"></div><div class="timeline-line"></div></div>
+              <div class="timeline-card"><div class="timeline-meta"><span class="timeline-title">Medication List</span><span class="timeline-date">01/01/2026</span></div><div class="timeline-source">Medications · SMH Hospital</div><div class="timeline-finding">Lisinopril 10mg daily</div></div>
+            </div>
+            <div class="timeline-event">
+              <div class="timeline-spine"><div class="timeline-dot path"></div><div class="timeline-line"></div></div>
+              <div class="timeline-card"><div class="timeline-meta"><span class="timeline-title">Core Biopsy — Right Breast</span><span class="timeline-date">12/28/2025</span></div><div class="timeline-source">Pathology · Blake Hospital</div><div class="timeline-finding bad">Invasive Ductal Ca., Grade 2 · ER+ 90% · PR+ 60%</div></div>
+            </div>
+            <div class="timeline-event">
+              <div class="timeline-spine"><div class="timeline-dot history"></div><div class="timeline-line"></div></div>
+              <div class="timeline-card"><div class="timeline-meta"><span class="timeline-title">Medical History Summary</span><span class="timeline-date">11/15/2025</span></div><div class="timeline-source">History · Tampa General</div><div class="timeline-finding">HTN (2018) · Family hx breast cancer · Non-smoker</div></div>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -1329,39 +1557,21 @@ Ki-67 Proliferation Index: 22%</div>
         <div class="search-input-wrap">
           <div class="search-input-inner">
             <svg class="search-input-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input class="search-input-field" placeholder="Any name…">
+            <input class="search-input-field" placeholder="Any name…" oninput="filterPatients(this.value)">
           </div>
         </div>
-        <div style="padding:8px 14px 4px;font-size:11px;color:var(--text-3);font-weight:500">13 patients</div>
+        <div style="padding:0 12px 8px;display:flex;align-items:center;gap:6px">
+          <span style="font-size:11px;color:var(--text-3);flex:1">7 patients</span>
+          <button class="btn btn-default" id="sort-btn" onclick="sortPatientsByDate()" style="height:26px;padding:0 8px;font-size:11px">↑ DOB</button>
+        </div>
         <div class="card-body">
-          <div class="list-item" onclick="openDetail('redesign')">
-            <div class="patient-avatar sm">BT</div>
-            <div class="list-item-body"><div class="list-item-name">Barbara Tan</div><div class="list-item-meta mono">05/04/1985 · MRN-XID7TG</div></div>
-          </div>
-          <div class="list-item" onclick="openDetail('redesign')">
-            <div class="patient-avatar sm">RT</div>
-            <div class="list-item-body"><div class="list-item-name">Robert Tan</div><div class="list-item-meta mono">02/14/1946 · MRN-6WYS1T</div></div>
-          </div>
-          <div class="list-item" onclick="openDetail('redesign')">
-            <div class="patient-avatar sm">ST</div>
-            <div class="list-item-body"><div class="list-item-name">Steven Tan</div><div class="list-item-meta mono">11/11/1999 · MRN-WY8MWN</div></div>
-          </div>
-          <div class="list-item" onclick="openDetail('redesign')">
-            <div class="patient-avatar sm">RJ</div>
-            <div class="list-item-body"><div class="list-item-name">Robert Jones</div><div class="list-item-meta mono">07/18/1987 · MRN-5G47K0</div></div>
-          </div>
-          <div class="list-item" onclick="openDetail('redesign')">
-            <div class="patient-avatar sm">HG</div>
-            <div class="list-item-body"><div class="list-item-name">Hugh Grant</div><div class="list-item-meta mono">11/11/1999 · MRN-7L0K1Y</div></div>
-          </div>
-          <div class="list-item" onclick="openDetail('redesign')">
-            <div class="patient-avatar sm">JH</div>
-            <div class="list-item-body"><div class="list-item-name">James Ho</div><div class="list-item-meta mono">11/23/1956 · MRN-DVYN0B</div></div>
-          </div>
-          <div class="list-item" onclick="openDetail('redesign')">
-            <div class="patient-avatar sm">LD</div>
-            <div class="list-item-body"><div class="list-item-name">Linda Doe</div><div class="list-item-meta mono">12/17/1964 · MRN-XIYAQH</div></div>
-          </div>
+          <div class="list-item" data-initials="BT"><div class="patient-avatar sm">BT</div><div class="list-item-body"><div class="list-item-name">Barbara Tan</div><div class="list-item-meta mono">05/04/1985 · MRN-XID7TG</div></div></div>
+          <div class="list-item" data-initials="RT"><div class="patient-avatar sm">RT</div><div class="list-item-body"><div class="list-item-name">Robert Tan</div><div class="list-item-meta mono">02/14/1946 · MRN-6WYS1T</div></div></div>
+          <div class="list-item" data-initials="ST"><div class="patient-avatar sm">ST</div><div class="list-item-body"><div class="list-item-name">Steven Tan</div><div class="list-item-meta mono">11/11/1999 · MRN-WY8MWN</div></div></div>
+          <div class="list-item" data-initials="RJ"><div class="patient-avatar sm">RJ</div><div class="list-item-body"><div class="list-item-name">Robert Jones</div><div class="list-item-meta mono">07/18/1987 · MRN-5G47K0</div></div></div>
+          <div class="list-item" data-initials="HG"><div class="patient-avatar sm">HG</div><div class="list-item-body"><div class="list-item-name">Hugh Grant</div><div class="list-item-meta mono">11/11/1999 · MRN-7L0K1Y</div></div></div>
+          <div class="list-item" data-initials="JH"><div class="patient-avatar sm">JH</div><div class="list-item-body"><div class="list-item-name">James Ho</div><div class="list-item-meta mono">11/23/1956 · MRN-DVYN0B</div></div></div>
+          <div class="list-item" data-initials="LD"><div class="patient-avatar sm">LD</div><div class="list-item-body"><div class="list-item-name">Linda Doe</div><div class="list-item-meta mono">12/17/1964 · MRN-XIYAQH</div></div></div>
         </div>
       </div>
     </div>
@@ -1376,39 +1586,42 @@ Ki-67 Proliferation Index: 22%</div>
       </div>
     </div>
     <div class="detail-col" id="patients-detail-panel" style="display:none">
-      <!-- same redesign panel content reused -->
       <div class="card" style="height:100%">
         <div style="display:flex;align-items:flex-start;gap:0;padding:12px 14px 0">
           <button class="icon-btn" onclick="closePatientsDetail()" style="margin-right:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-          <div class="patient-avatar lg">ST</div>
+          <div class="patient-avatar lg" id="pt-initials">ST</div>
           <div style="flex:1;min-width:0;margin-left:12px">
-            <div style="font-size:18px;font-weight:700;color:var(--text)">Steven Tan</div>
-            <div style="display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;margin-top:4px;font-size:12px;color:var(--text-2)">
-              <span><span style="color:var(--text-3)">DOB </span>11/11/1999</span>
-              <span><span style="color:var(--text-3)">MRN </span><span style="font-family:var(--fm)">MRN-WY8MWN</span></span>
+            <div id="pt-name" style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.015em">Steven Tan</div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;row-gap:2px;margin-top:4px;font-size:12px;color:var(--text-2)">
+              <span><span style="color:var(--text-3)">DOB </span><span id="pt-dob">11/11/1999</span></span>
+              <span><span style="color:var(--text-3)">MRN </span><span id="pt-mrn" style="font-family:var(--fm)">MRN-WY8MWN</span></span>
+              <span style="color:var(--text-3)" id="pt-summary">11 records from 3 hospitals</span>
             </div>
           </div>
         </div>
         <div style="height:1px;background:var(--border);margin:10px 0 0"></div>
         <div class="tabs">
-          <button class="tab active">All <span class="tab-count">11</span></button>
-          <button class="tab">Labs <span class="tab-count">4</span></button>
-          <button class="tab">Imaging <span class="tab-count">3</span></button>
-          <button class="tab">Pathology <span class="tab-count">2</span></button>
-          <button class="tab">History</button>
-          <button class="tab">Discharge</button>
-          <button class="tab">Medications</button>
-          <button class="tab">Other</button>
+          <button class="tab active" onclick="switchTabP(this,'p-all')">All <span class="tab-count">11</span></button>
+          <button class="tab" onclick="switchTabP(this,'p-labs')">Labs <span class="tab-count">4</span></button>
+          <button class="tab" onclick="switchTabP(this,'p-imaging')">Imaging <span class="tab-count">3</span></button>
+          <button class="tab" onclick="switchTabP(this,'p-pathology')">Pathology <span class="tab-count">2</span></button>
+          <button class="tab" onclick="switchTabP(this,'p-history')">History <span class="tab-count">1</span></button>
+          <button class="tab" onclick="switchTabP(this,'p-discharge')">Discharge <span class="tab-count zero">0</span></button>
+          <button class="tab" onclick="switchTabP(this,'p-medications')">Medications <span class="tab-count">1</span></button>
+          <button class="tab" onclick="switchTabP(this,'p-other')">Other <span class="tab-count zero">0</span></button>
         </div>
         <div class="card-body card-body-padded" style="padding-top:12px">
-          <div class="doc-card">
-            <div class="doc-card-header"><div class="doc-cat-icon labs">🧪</div><div class="doc-card-title-area"><div class="doc-card-title">CBC — Complete Blood Count</div><div class="doc-card-source">Labs · SMH Hospital</div></div><div class="doc-card-date" style="margin-right:8px">01/01/2026</div><div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div>
-            <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Hemoglobin</span><span class="doc-field-value flagged-H">12.9 g/dL <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">WBC</span><span class="doc-field-value">9.4 × 10⁹/L</span></div><div class="doc-field"><span class="doc-field-label">Hematocrit</span><span class="doc-field-value">38.2%</span></div><div class="doc-field"><span class="doc-field-label">Platelets</span><span class="doc-field-value">210 × 10⁹/L</span></div></div></div>
+          <div id="p-all" class="tab-panel active">
+            <div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M9 3v7.5L5 19a1 1 0 00.9 1.5h12.2a1 1 0 00.9-1.5L15 10.5V3"/><line x1="9.5" y1="14" x2="14.5" y2="14"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">CBC — Complete Blood Count</div><div class="doc-card-source">Labs · SMH Hospital</div></div><div class="doc-card-date" style="margin-right:8px">01/01/2026</div><div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Hemoglobin</span><span class="doc-field-value flagged-H">12.9 g/dL <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">WBC</span><span class="doc-field-value">9.4 × 10⁹/L</span></div><div class="doc-field"><span class="doc-field-label">Hematocrit</span><span class="doc-field-value">38.2%</span></div><div class="doc-field"><span class="doc-field-label">Platelets</span><span class="doc-field-value">210 × 10⁹/L</span></div></div></div></div>
+            <div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon imaging"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Mammogram — Bilateral Screening</div><div class="doc-card-source">Imaging · Doctors Hospital</div></div><div class="doc-card-date" style="margin-right:8px">01/25/2026</div><div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">BI-RADS</span><span class="doc-field-value" style="color:var(--warn);font-weight:600">Category 3</span></div><div class="doc-field"><span class="doc-field-label">Finding</span><span class="doc-field-value">1.2 cm mass, 2 o'clock</span></div></div><div class="doc-tags"><span class="doc-tag negative">Left breast clear</span><span class="doc-tag">6-mo follow-up</span></div></div></div>
           </div>
-          <div class="doc-card">
-            <div class="doc-card-header"><div class="doc-cat-icon imaging">🔬</div><div class="doc-card-title-area"><div class="doc-card-title">Mammogram — Bilateral Screening</div><div class="doc-card-source">Imaging · Doctors Hospital</div></div><div class="doc-card-date" style="margin-right:8px">01/25/2026</div><div class="doc-card-actions"><button class="doc-pdf-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button></div></div>
-            <div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">BI-RADS</span><span class="doc-field-value" style="color:var(--warn);font-weight:600">Category 3</span></div><div class="doc-field"><span class="doc-field-label">Finding</span><span class="doc-field-value">1.2 cm mass</span></div><div class="doc-field"><span class="doc-field-label">Location</span><span class="doc-field-value">R breast, 2 o'clock</span></div></div><div class="doc-tags"><span class="doc-tag negative">Left breast clear</span><span class="doc-tag">6-mo follow-up</span></div></div>
-          </div>
+          <div id="p-labs" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M9 3v7.5L5 19a1 1 0 00.9 1.5h12.2a1 1 0 00.9-1.5L15 10.5V3"/><line x1="9.5" y1="14" x2="14.5" y2="14"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">CBC — Complete Blood Count</div><div class="doc-card-source">Labs · SMH Hospital</div></div><div class="doc-card-date">01/01/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Hemoglobin</span><span class="doc-field-value flagged-H">12.9 g/dL <span class="flag flag-H">H</span></span></div><div class="doc-field"><span class="doc-field-label">WBC</span><span class="doc-field-value">9.4 × 10⁹/L</span></div></div></div></div></div>
+          <div id="p-imaging" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon imaging"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Mammogram — Bilateral Screening</div><div class="doc-card-source">Imaging · Doctors Hospital</div></div><div class="doc-card-date">01/25/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">BI-RADS</span><span class="doc-field-value" style="color:var(--warn);font-weight:600">Category 3</span></div><div class="doc-field"><span class="doc-field-label">Finding</span><span class="doc-field-value">1.2 cm mass</span></div></div></div></div></div>
+          <div id="p-pathology" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 21h18"/><path d="M14 21v-4a2 2 0 00-2-2H8"/><path d="M10 4v7"/><path d="M7.5 4h5"/><path d="M12.5 4l2.5 7"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Core Biopsy — Right Breast</div><div class="doc-card-source">Pathology · Blake Hospital</div></div><div class="doc-card-date">12/28/2025</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Diagnosis</span><span class="doc-field-value" style="color:var(--bad);font-weight:700">Invasive Ductal Ca.</span></div><div class="doc-field"><span class="doc-field-label">ER</span><span class="doc-field-value flagged-H">Positive 90% <span class="flag flag-H">+</span></span></div></div><div class="doc-tags"><span class="doc-tag positive">ER+</span><span class="doc-tag positive">PR+</span></div></div></div></div>
+          <div id="p-history" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon history"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Medical History Summary</div><div class="doc-card-source">History · Tampa General</div></div><div class="doc-card-date">11/15/2025</div></div><div class="doc-card-body"><div class="doc-narrative">Hypertension (2018), well-controlled on lisinopril. Family history of breast cancer (maternal aunt). No prior surgeries. Non-smoker.</div></div></div></div>
+          <div id="p-discharge" class="tab-panel"><div class="empty-state"><div class="empty-state-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="empty-state-title">No discharge documents</div><div class="empty-state-body">No documents in this category.</div></div></div>
+          <div id="p-medications" class="tab-panel"><div class="doc-card"><div class="doc-card-header"><div class="doc-cat-icon other"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 10-7-7l-10 10a4.95 4.95 0 107 7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg></div><div class="doc-card-title-area"><div class="doc-card-title">Medication List</div><div class="doc-card-source">Medications · SMH Hospital</div></div><div class="doc-card-date">01/01/2026</div></div><div class="doc-card-body"><div class="doc-fields"><div class="doc-field"><span class="doc-field-label">Lisinopril</span><span class="doc-field-value">10mg daily</span></div><div class="doc-field"><span class="doc-field-label">Indication</span><span class="doc-field-value">Hypertension</span></div></div></div></div></div>
+          <div id="p-other" class="tab-panel"><div class="empty-state"><div class="empty-state-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><div class="empty-state-title">No other documents</div><div class="empty-state-body">No uncategorized documents.</div></div></div>
         </div>
       </div>
     </div>
@@ -1421,7 +1634,7 @@ Ki-67 Proliferation Index: 22%</div>
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title">New Patient Search</span>
-      <button class="modal-close" onclick="closeModal()">×</button>
+      <button class="modal-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -1451,7 +1664,7 @@ Ki-67 Proliferation Index: 22%</div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-default" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-cta" onclick="closeModal()">
+      <button class="btn btn-cta" onclick="submitSearch()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         Run Search
       </button>
@@ -1462,20 +1675,32 @@ Ki-67 Proliferation Index: 22%</div>
 <script>
   // ── State ──────────────────────────────────────────
   let currentPage = 'searches';
+  let currentStyle = 'redesign'; // persists across list item clicks
   let sidebarCollapsed = false;
+  let elapsedSeconds = 42;
+  let elapsedInterval = null;
+  let sortAsc = true;
+
+  // ── Patients data ──────────────────────────────────
+  const PATIENTS = {
+    BT:{name:'Barbara Tan',  dob:'05/04/1985',mrn:'MRN-XID7TG',records:8,  hospitals:2},
+    RT:{name:'Robert Tan',   dob:'02/14/1946',mrn:'MRN-6WYS1T',records:14, hospitals:4},
+    ST:{name:'Steven Tan',   dob:'11/11/1999',mrn:'MRN-WY8MWN',records:11, hospitals:3},
+    RJ:{name:'Robert Jones', dob:'07/18/1987',mrn:'MRN-5G47K0',records:6,  hospitals:2},
+    HG:{name:'Hugh Grant',   dob:'11/11/1999',mrn:'MRN-7L0K1Y',records:9,  hospitals:3},
+    JH:{name:'James Ho',     dob:'11/23/1956',mrn:'MRN-DVYN0B',records:17, hospitals:5},
+    LD:{name:'Linda Doe',    dob:'12/17/1964',mrn:'MRN-XIYAQH',records:5,  hospitals:2},
+  };
 
   // ── Page navigation ────────────────────────────────
   function goTo(page) {
     currentPage = page;
-
     document.getElementById('page-login').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     document.getElementById('page-searches').style.display = 'none';
     document.getElementById('page-patients').style.display = 'none';
-
     document.querySelectorAll('.sidebar-nav-item').forEach(n => n.classList.remove('active'));
     document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
-
     if (page === 'login') {
       document.getElementById('page-login').style.display = 'block';
       document.getElementById('app').style.display = 'none';
@@ -1486,62 +1711,152 @@ Ki-67 Proliferation Index: 22%</div>
       document.getElementById('page-patients').style.display = 'flex';
       document.getElementById('nav-patients')?.classList.add('active');
     }
-
-    // Sync demo bar
     document.querySelectorAll('.demo-btn').forEach(b => {
       if (b.getAttribute('onclick')?.includes(`'${page}'`)) b.classList.add('active');
     });
   }
 
-  // ── Detail panel ────────────────────────────────────
+  // ── Login with spinner ─────────────────────────────
+  function submitLogin() {
+    const btn = document.getElementById('login-btn');
+    btn.innerHTML = '<span class="spinner" style="border-color:rgba(255,255,255,.3);border-top-color:#fff;width:16px;height:16px"></span>';
+    btn.disabled = true;
+    setTimeout(() => { btn.disabled = false; goTo('searches'); }, 900);
+  }
+
+  // ── Detail panel (demo bar style toggle) ───────────
   function openDetail(style) {
-    // hide all detail panels
-    document.getElementById('detail-empty').style.display = 'none';
-    document.getElementById('detail-current').style.display = 'none';
-    document.getElementById('detail-redesign').style.display = 'none';
-    // show chosen
-    document.getElementById('detail-' + style).style.display = 'flex';
-    // sync demo bar
+    currentStyle = style;
+    _hideAllSearchDetails();
+    _showDetail('detail-' + style);
     document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
-    if (style === 'current') {
-      document.querySelectorAll('.demo-btn')[3]?.classList.add('active');
-    } else if (style === 'redesign') {
-      document.querySelectorAll('.demo-btn')[4]?.classList.add('active');
-    }
+    if (style === 'current') document.querySelectorAll('.demo-btn')[3]?.classList.add('active');
+    else if (style === 'redesign') document.querySelectorAll('.demo-btn')[4]?.classList.add('active');
     goTo('searches');
   }
 
+  // ── Search item click ──────────────────────────────
+  function openSearchItem(el, status) {
+    document.querySelectorAll('#page-searches .list-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    clearInterval(elapsedInterval);
+    _hideAllSearchDetails();
+    if (status === 'running') {
+      _showDetail('detail-running');
+      elapsedInterval = setInterval(() => {
+        elapsedSeconds++;
+        const m = Math.floor(elapsedSeconds / 60), s = elapsedSeconds % 60;
+        const el = document.getElementById('detail-running-elapsed');
+        if (el) el.textContent = m + ':' + String(s).padStart(2,'0');
+      }, 1000);
+    } else if (status === 'failed') {
+      _showDetail('detail-failed');
+    } else if (status === 'no-results') {
+      _showDetail('detail-no-results');
+    } else {
+      _showDetail('detail-' + currentStyle);
+    }
+  }
+
+  function _hideAllSearchDetails() {
+    ['empty','current','redesign','running','failed','no-results'].forEach(id => {
+      const el = document.getElementById('detail-' + id);
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  function _showDetail(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = 'flex';
+    el.classList.remove('panel-in');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { el.classList.add('panel-in'); });
+    });
+  }
+
   function closeDetail() {
-    document.getElementById('detail-current').style.display = 'none';
-    document.getElementById('detail-redesign').style.display = 'none';
+    clearInterval(elapsedInterval);
+    _hideAllSearchDetails();
     document.getElementById('detail-empty').style.display = 'flex';
+    document.querySelectorAll('#page-searches .list-item').forEach(i => i.classList.remove('selected'));
     document.querySelectorAll('.demo-btn').forEach(b => {
       if (b.getAttribute('onclick')?.includes("'searches'")) b.classList.add('active');
     });
   }
 
+  // ── Search → Patient link ──────────────────────────
+  function viewPatientFromSearch() {
+    goTo('patients');
+    setTimeout(() => {
+      const item = document.querySelector('#page-patients .list-item[data-initials="ST"]');
+      if (item) { item.classList.add('selected'); openPatientDetail('ST'); }
+    }, 50);
+  }
+
+  // ── Patients detail ────────────────────────────────
+  function openPatientDetail(initials) {
+    const p = PATIENTS[initials];
+    if (!p) return;
+    document.getElementById('patients-detail-empty').style.display = 'none';
+    const panel = document.getElementById('patients-detail-panel');
+    panel.style.display = 'flex';
+    panel.classList.remove('panel-in');
+    requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('panel-in')));
+    document.getElementById('pt-initials').textContent = initials;
+    document.getElementById('pt-name').textContent = p.name;
+    document.getElementById('pt-dob').textContent = p.dob;
+    document.getElementById('pt-mrn').textContent = p.mrn;
+    document.getElementById('pt-summary').textContent = p.records + ' records from ' + p.hospitals + ' hospitals';
+    // Reset to All tab
+    const firstTab = document.querySelector('#patients-detail-panel .tabs .tab');
+    if (firstTab) switchTabP(firstTab, 'p-all');
+  }
+
   function closePatientsDetail() {
     document.getElementById('patients-detail-panel').style.display = 'none';
     document.getElementById('patients-detail-empty').style.display = 'flex';
-    document.querySelectorAll('.list-item').forEach(i => i.classList.remove('selected'));
+    document.querySelectorAll('#page-patients .list-item').forEach(i => i.classList.remove('selected'));
   }
 
-  // Override patient list clicks
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('#page-patients .list-item').forEach(item => {
-      item.addEventListener('click', () => {
-        document.getElementById('patients-detail-empty').style.display = 'none';
-        document.getElementById('patients-detail-panel').style.display = 'flex';
-        document.querySelectorAll('#page-patients .list-item').forEach(i => i.classList.remove('selected'));
-        item.classList.add('selected');
-      });
-    });
-  });
+  // ── Run Search (modal submit) ──────────────────────
+  function submitSearch() {
+    const inputs = document.querySelectorAll('#modalOverlay .form-input');
+    const first = inputs[0]?.value.trim() || 'New';
+    const last  = inputs[1]?.value.trim() || 'Patient';
+    inputs.forEach(i => i.value = '');
+    closeModal();
+    const initials = (first[0]||'N').toUpperCase() + (last[0]||'P').toUpperCase();
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    item.innerHTML = `
+      <div class="list-item-body">
+        <div class="list-item-name">${first} ${last}</div>
+        <div class="list-item-meta mono">Searching…</div>
+      </div>
+      <div class="list-item-side">
+        <span class="status-pill running"><span class="status-dot"></span>Running</span>
+        <span class="new-item-elapsed" style="font-size:11px;color:var(--text-3)">0:00</span>
+      </div>`;
+    let secs = 0;
+    const tick = setInterval(() => {
+      if (!document.contains(item)) { clearInterval(tick); return; }
+      secs++;
+      const m = Math.floor(secs/60), s = secs%60;
+      item.querySelector('.new-item-elapsed').textContent = m+':'+String(s).padStart(2,'0');
+    }, 1000);
+    item.onclick = () => openSearchItem(item, 'running');
+    document.querySelector('#page-searches .card-body').prepend(item);
+    item.click();
+  }
 
   // ── Tabs (current style) ───────────────────────────
   function switchTab(btn, id) {
     btn.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
+    document.querySelectorAll('#detail-current .tab-panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('c-' + id);
+    if (panel) panel.classList.add('active');
   }
 
   // ── Tabs (redesign style) ──────────────────────────
@@ -1553,33 +1868,86 @@ Ki-67 Proliferation Index: 22%</div>
     if (target) target.classList.add('active');
   }
 
-  // ── Sidebar collapse ──────────────────────────────
+  // ── Tabs (patients page) ───────────────────────────
+  function switchTabP(btn, panelId) {
+    btn.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#patients-detail-panel .tab-panel').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(panelId);
+    if (target) target.classList.add('active');
+  }
+
+  // ── Timeline / Tabs view toggle ────────────────────
+  function switchView(view) {
+    const tabsRow   = document.getElementById('redesign-tabs-row');
+    const tabsBody  = document.getElementById('redesign-body');
+    const tlBody    = document.getElementById('timeline-body');
+    document.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+    if (view === 'timeline') {
+      tabsRow.style.display  = 'none';
+      tabsBody.style.display = 'none';
+      tlBody.style.display   = 'block';
+    } else {
+      tabsRow.style.display  = '';
+      tabsBody.style.display = '';
+      tlBody.style.display   = 'none';
+    }
+  }
+
+  // ── Patients filter & sort ─────────────────────────
+  function filterPatients(q) {
+    q = q.toLowerCase().trim();
+    document.querySelectorAll('#page-patients .list-item[data-initials]').forEach(item => {
+      const name = item.querySelector('.list-item-name')?.textContent.toLowerCase() || '';
+      item.style.display = (!q || name.includes(q)) ? '' : 'none';
+    });
+  }
+
+  function sortPatientsByDate() {
+    sortAsc = !sortAsc;
+    const btn = document.getElementById('sort-btn');
+    btn.textContent = (sortAsc ? '↑' : '↓') + ' DOB';
+    const list = document.querySelector('#page-patients .card-body');
+    const items = [...list.querySelectorAll('.list-item[data-initials]')];
+    items.sort((a, b) => {
+      const da = a.querySelector('.list-item-meta')?.textContent || '';
+      const db = b.querySelector('.list-item-meta')?.textContent || '';
+      return sortAsc ? da.localeCompare(db) : db.localeCompare(da);
+    });
+    items.forEach(i => list.appendChild(i));
+  }
+
+  // ── Sidebar collapse ───────────────────────────────
   function toggleSidebar() {
     sidebarCollapsed = !sidebarCollapsed;
-    const sidebar = document.getElementById('sidebar');
-    const icon = document.getElementById('collapseIcon');
-    sidebar.classList.toggle('collapsed', sidebarCollapsed);
-    icon.querySelector('polyline').setAttribute('points', sidebarCollapsed ? '9 18 15 12 9 6' : '15 18 9 12 15 6');
+    document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+    document.getElementById('collapseIcon').querySelector('polyline')
+      .setAttribute('points', sidebarCollapsed ? '9 18 15 12 9 6' : '15 18 9 12 15 6');
   }
 
-  // ── Modal ─────────────────────────────────────────
-  function openModal() {
-    document.getElementById('modalOverlay').style.display = 'flex';
-  }
-  function closeModal() {
-    document.getElementById('modalOverlay').style.display = 'none';
-  }
-  function closeModalOutside(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-  }
+  // ── Modal ──────────────────────────────────────────
+  function openModal()  { document.getElementById('modalOverlay').style.display = 'flex'; }
+  function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+  function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 
-  // ── Keyboard shortcuts ────────────────────────────
+  // ── Keyboard ───────────────────────────────────────
   document.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal() }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal(); }
     if (e.key === 'Escape') closeModal();
   });
 
-  // ── Init ─────────────────────────────────────────
+  // ── DOMContentLoaded wiring ────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#page-patients .list-item[data-initials]').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('#page-patients .list-item').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        openPatientDetail(item.dataset.initials);
+      });
+    });
+  });
+
+  // ── Init ───────────────────────────────────────────
   goTo('searches');
 </script>
 </body>
