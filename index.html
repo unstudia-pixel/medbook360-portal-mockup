@@ -1339,6 +1339,7 @@
           <!-- Doc row 1 - Labs -->
           <div class="document-row">
             <div class="document-header">
+              <div class="doc-cat-icon labs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M9 3v7.5L5 19a1 1 0 00.9 1.5h12.2a1 1 0 00.9-1.5L15 10.5V3"/><line x1="9.5" y1="14" x2="14.5" y2="14"/></svg></div>
               <div style="flex:1;min-width:0">
                 <div class="document-title">CBC — Complete Blood Count</div>
                 <div class="document-source">Labs <span class="hospital-chip" style="background:oklch(52% .18 252 / .12);border-color:oklch(52% .18 252 / .28);color:oklch(38% .18 252)">SMH Hospital</span></div>
@@ -1364,6 +1365,7 @@ Interpretation: Mild elevation in hemoglobin. WBC and platelets within normal ra
           <!-- Doc row 2 - Imaging -->
           <div class="document-row">
             <div class="document-header">
+              <div class="doc-cat-icon imaging"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
               <div style="flex:1;min-width:0">
                 <div class="document-title">Mammogram — Bilateral Screening</div>
                 <div class="document-source">Imaging <span class="hospital-chip" style="background:oklch(52% .18 152 / .12);border-color:oklch(52% .18 152 / .28);color:oklch(38% .18 152)">Doctors Hospital</span></div>
@@ -1388,6 +1390,7 @@ IMPRESSION: BI-RADS Category 3 — Probably benign. Recommend 6-month follow-up 
           <!-- Doc row 3 -->
           <div class="document-row">
             <div class="document-header">
+              <div class="doc-cat-icon path"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="20" height="7" rx="2"/><circle cx="8.5" cy="12.5" r="1.5"/><circle cx="14" cy="12.5" r="1.5"/><path d="M4 9V6M20 9V6M12 9V5"/></svg></div>
               <div style="flex:1;min-width:0">
                 <div class="document-title">Core Biopsy — Right Breast</div>
                 <div class="document-source">Pathology <span class="hospital-chip" style="background:oklch(52% .18 68 / .12);border-color:oklch(52% .18 68 / .28);color:oklch(38% .18 68)">Blake Hospital</span></div>
@@ -2082,7 +2085,7 @@ Ki-67 Proliferation Index: 22%</div>
     panel.classList.remove('panel-in');
     requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('panel-in')));
     document.getElementById('pt-initials').textContent = initials;
-    document.getElementById('pt-initials').style.cssText = avatarStyle(initials);
+    applyAvatarColor(document.getElementById('pt-initials'), initials);
     document.getElementById('pt-name').textContent = p.name;
     document.getElementById('pt-dob').textContent = p.dob;
     document.getElementById('pt-mrn').textContent = p.mrn;
@@ -2110,7 +2113,6 @@ Ki-67 Proliferation Index: 22%</div>
     const item = document.createElement('div');
     item.className = 'list-item';
     const hue = hashColor(initials);
-    const avStyle = avatarStyle(initials);
     item.innerHTML = `
       <div class="list-item-body">
         <div class="list-item-name">${first} ${last}</div>
