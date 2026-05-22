@@ -600,6 +600,7 @@
   .doc-card-source {
     font-size: 11px; color: var(--text-3); margin-top: 1px;
     text-transform: uppercase; letter-spacing: .04em; font-weight: 600;
+    display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
   }
   .doc-card-date {
     font-family: var(--fm); font-size: 12px; color: var(--text-3);
@@ -890,7 +891,7 @@
     display: inline-flex; align-items: center;
     font-size: 10px; font-weight: 600;
     padding: 1px 6px; border-radius: 99px;
-    border: 1px solid; vertical-align: middle; margin-left: 4px;
+    border: 1px solid; vertical-align: middle; flex-shrink: 0;
   }
 
   /* ── Patient saved banner ── */
