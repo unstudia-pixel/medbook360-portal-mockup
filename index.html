@@ -71,32 +71,26 @@
   }
 
   /* Sidebar edge toggle tab */
-  .sidebar-toggle-tab {
-    position: absolute;
-    top: calc(var(--margin) + 17px);
-    left: calc(var(--margin) + var(--sidebar-w));
-    width: 18px; height: 38px;
-    background: oklch(15% .035 240);
-    border: 1px solid rgba(255,255,255,.07);
-    border-left: none;
-    border-radius: 0 8px 8px 0;
+  /* Internal sidebar collapse toggle */
+  .sidebar-toggle-inner {
+    margin-left: auto; flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 6px; border: none;
+    background: none;
+    color: rgba(255,255,255,.25);
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    color: rgba(255,255,255,.45);
-    box-shadow: 4px 0 12px rgba(0,0,0,.22), 0 1px 3px rgba(0,0,0,.12);
-    transition: left .2s ease-out, color .12s, background .12s, box-shadow .12s;
-    z-index: 20; padding: 0;
+    opacity: 0;
+    transition: opacity .15s, color .12s, background .12s;
+    padding: 0;
   }
-  .sidebar-toggle-tab:hover {
-    color: rgba(255,255,255,.85);
-    background: oklch(19% .04 240);
-    box-shadow: 4px 0 16px rgba(0,0,0,.28), 0 1px 4px rgba(0,0,0,.14);
+  .sidebar:hover .sidebar-toggle-inner { opacity: 1 }
+  .sidebar-toggle-inner:hover { color: rgba(255,255,255,.8); background: rgba(255,255,255,.08) }
+  .sidebar-toggle-inner svg { transition: transform .2s ease-out }
+  .sidebar.collapsed .sidebar-toggle-inner {
+    margin-left: 0; opacity: 1; margin-top: 6px;
   }
-  .sidebar-toggle-tab svg { transition: transform .2s ease-out }
-  #sidebar.collapsed ~ .sidebar-toggle-tab {
-    left: calc(var(--margin) + var(--sidebar-w-collapsed));
-  }
-  #sidebar.collapsed ~ .sidebar-toggle-tab svg { transform: rotate(180deg) }
+  .sidebar.collapsed .sidebar-toggle-inner svg { transform: rotate(180deg) }
 
   /* ══════════════════════════════════════════════════════
      SIDEBAR
@@ -121,7 +115,7 @@
   ═══════════════════════════════════════════════════════ */
 
   /* Logo row */
-  .sidebar.collapsed .sidebar-logo          { justify-content: center; padding: 0 }
+  .sidebar.collapsed .sidebar-logo          { flex-direction: column; align-items: center; justify-content: center; padding: 8px 0 6px; gap: 0 }
   .sidebar.collapsed .sidebar-logo-full     { display: none }
   .sidebar.collapsed .sidebar-logo-collapsed{ display: block }
 
@@ -1033,10 +1027,13 @@
     <div class="sidebar-logo">
       <div class="sidebar-logo-full" role="img" aria-label="MedBook 360"></div>
       <div class="sidebar-logo-collapsed"></div>
+      <button class="sidebar-toggle-inner" onclick="toggleSidebar()" title="Collapse sidebar">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
     </div>
 
     <div class="sidebar-new-search">
-      <button class="sidebar-new-search-btn" onclick="openModal()">
+      <button class="sidebar-new-search-btn" onclick="openModal()" title="New Search">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         <span class="sidebar-new-search-label">New Search</span>
         <span class="sidebar-new-search-spacer"></span>
@@ -1045,12 +1042,12 @@
     </div>
 
     <nav class="sidebar-nav">
-      <button class="sidebar-nav-item active" id="nav-searches" onclick="goTo('searches')">
+      <button class="sidebar-nav-item active" id="nav-searches" onclick="goTo('searches')" title="Searches">
         <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span class="sidebar-nav-label">Searches</span>
         <span class="sidebar-nav-item-count">7</span>
       </button>
-      <button class="sidebar-nav-item" id="nav-patients" onclick="goTo('patients')" style="margin-top:6px">
+      <button class="sidebar-nav-item" id="nav-patients" onclick="goTo('patients')" style="margin-top:6px" title="Patients">
         <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span class="sidebar-nav-label">Patients</span>
         <span class="sidebar-nav-item-count">7</span>
@@ -1069,11 +1066,6 @@
       </button>
     </div>
   </aside>
-
-  <!-- Sidebar edge toggle -->
-  <button class="sidebar-toggle-tab" onclick="toggleSidebar()" title="Toggle sidebar">
-    <svg id="collapseIcon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-  </button>
 
   <!-- ── SEARCHES PAGE ── -->
   <div class="panel-area" id="page-searches">
@@ -2217,6 +2209,8 @@ Ki-67 Proliferation Index: 22%</div>
   function toggleSidebar() {
     sidebarCollapsed = !sidebarCollapsed;
     document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+    const btn = document.querySelector('.sidebar-toggle-inner');
+    if (btn) btn.title = sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar';
   }
 
   // ── Modal ──────────────────────────────────────────
