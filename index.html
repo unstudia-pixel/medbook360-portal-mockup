@@ -280,16 +280,21 @@
   ══════════════════════════════════════════════════════ */
   .panel-area {
     flex: 1; min-width: 0;
-    display: flex; flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: var(--gap);
     overflow: hidden;
+    transition: grid-template-columns .22s ease-out;
+  }
+  .panel-area.has-detail {
+    grid-template-columns: var(--list-card) 1fr;
   }
   .list-col {
-    width: var(--list-card); flex-shrink: 0;
+    min-width: 0;
     display: flex; flex-direction: column; min-height: 0;
   }
   .detail-col {
-    flex: 1; min-width: 0;
+    min-width: 0;
     display: flex; flex-direction: column;
     position: relative;
   }
@@ -1755,7 +1760,7 @@ Ki-67 Proliferation Index: 22%</div>
     </div>
 
     <!-- Placeholder when nothing selected -->
-    <div class="detail-col" id="detail-empty">
+    <div class="detail-col" id="detail-empty" style="display:none">
       <div class="card" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0">
         <div style="max-width:320px;text-align:center;padding:48px 24px">
           <div style="width:56px;height:56px;border-radius:16px;background:oklch(55% .22 252 / .1);border:1px solid oklch(55% .22 252 / .18);display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
@@ -1812,7 +1817,7 @@ Ki-67 Proliferation Index: 22%</div>
       </div>
     </div>
 
-    <div class="detail-col" id="patients-detail-empty">
+    <div class="detail-col" id="patients-detail-empty" style="display:none">
       <div class="card" style="height:100%">
         <div class="empty-state" style="height:100%">
           <div class="empty-state-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
@@ -1973,10 +1978,10 @@ Ki-67 Proliferation Index: 22%</div>
       document.getElementById('page-login').style.display = 'block';
       document.getElementById('app').style.display = 'none';
     } else if (page === 'searches') {
-      document.getElementById('page-searches').style.display = 'flex';
+      document.getElementById('page-searches').style.display = 'grid';
       document.getElementById('nav-searches')?.classList.add('active');
     } else if (page === 'patients') {
-      document.getElementById('page-patients').style.display = 'flex';
+      document.getElementById('page-patients').style.display = 'grid';
       document.getElementById('nav-patients')?.classList.add('active');
     }
     document.querySelectorAll('.demo-btn').forEach(b => {
@@ -2043,6 +2048,7 @@ Ki-67 Proliferation Index: 22%</div>
     const el = document.getElementById(id);
     if (!el) return;
     el.style.display = 'flex';
+    el.closest('.panel-area')?.classList.add('has-detail');
     el.classList.remove('panel-in');
     requestAnimationFrame(() => {
       requestAnimationFrame(() => { el.classList.add('panel-in'); });
@@ -2052,7 +2058,7 @@ Ki-67 Proliferation Index: 22%</div>
   function closeDetail() {
     clearInterval(elapsedInterval);
     _hideAllSearchDetails();
-    document.getElementById('detail-empty').style.display = 'flex';
+    document.getElementById('page-searches').classList.remove('has-detail');
     document.querySelectorAll('#page-searches .list-item').forEach(i => i.classList.remove('selected'));
     document.querySelectorAll('.demo-btn').forEach(b => {
       if (b.getAttribute('onclick')?.includes("'searches'")) b.classList.add('active');
@@ -2075,6 +2081,7 @@ Ki-67 Proliferation Index: 22%</div>
     document.getElementById('patients-detail-empty').style.display = 'none';
     const panel = document.getElementById('patients-detail-panel');
     panel.style.display = 'flex';
+    document.getElementById('page-patients').classList.add('has-detail');
     panel.classList.remove('panel-in');
     requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('panel-in')));
     document.getElementById('pt-initials').textContent = initials;
@@ -2090,7 +2097,7 @@ Ki-67 Proliferation Index: 22%</div>
 
   function closePatientsDetail() {
     document.getElementById('patients-detail-panel').style.display = 'none';
-    document.getElementById('patients-detail-empty').style.display = 'flex';
+    document.getElementById('page-patients').classList.remove('has-detail');
     document.querySelectorAll('#page-patients .list-item').forEach(i => i.classList.remove('selected'));
   }
 
