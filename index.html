@@ -74,18 +74,16 @@
   /* Internal sidebar collapse toggle */
   .sidebar-toggle-inner {
     margin-left: auto; flex-shrink: 0;
-    width: 22px; height: 22px;
-    border-radius: 6px; border: none;
-    background: none;
-    color: rgba(255,255,255,.25);
+    width: 24px; height: 24px;
+    border-radius: 7px; border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.07);
+    color: rgba(255,255,255,.55);
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    opacity: 0;
-    transition: opacity .15s, color .12s, background .12s;
+    transition: color .12s, background .12s, border-color .12s;
     padding: 0;
   }
-  .sidebar:hover .sidebar-toggle-inner { opacity: 1 }
-  .sidebar-toggle-inner:hover { color: rgba(255,255,255,.8); background: rgba(255,255,255,.08) }
+  .sidebar-toggle-inner:hover { color: #fff; background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.18) }
   .sidebar-toggle-inner svg { transition: transform .2s ease-out }
   .sidebar.collapsed .sidebar-toggle-inner {
     margin-left: 0; opacity: 1; margin-top: 6px;
