@@ -1185,13 +1185,6 @@
               <span style="font-size:11px;color:var(--text-3)">6d ago</span>
             </div>
           </div>
-          <div id="onboarding-tip" style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(to top,var(--bg-surface) 60%,transparent);pointer-events:none;display:flex;justify-content:center">
-            <div style="display:inline-flex;align-items:center;gap:6px;background:var(--bg-surface);border:1px solid var(--border);color:var(--text);font-size:11.5px;font-weight:500;padding:7px 12px;border-radius:99px;box-shadow:0 4px 16px rgba(20,44,84,.14);pointer-events:auto">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color:var(--cyan-600)"><polyline points="9 18 15 12 9 6"/></svg>
-              Click any search to view records
-              <button onclick="dismissTip()" style="background:var(--bg-hover);border:none;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:var(--ff);margin-left:2px">Got it</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -1974,13 +1967,6 @@ Ki-67 Proliferation Index: 22%</div>
     el.style.color = '#fff';
   }
 
-  // ── Onboarding tip (feature 9) ────────────────────
-  function dismissTip() {
-    const tip = document.getElementById('onboarding-tip');
-    if (tip) { tip.style.opacity='0'; tip.style.transition='opacity .3s'; setTimeout(()=>tip.remove(),300); }
-    localStorage.setItem('mb360-tip-dismissed','1');
-  }
-
   // ── State ──────────────────────────────────────────
   let currentPage = 'searches';
   let currentStyle = 'redesign'; // persists across list item clicks
@@ -2045,7 +2031,6 @@ Ki-67 Proliferation Index: 22%</div>
 
   // ── Search item click ──────────────────────────────
   function openSearchItem(el, status) {
-    dismissTip();
     document.querySelectorAll('#page-searches .list-item').forEach(i => i.classList.remove('selected'));
     el.classList.add('selected');
     clearInterval(elapsedInterval);
@@ -2315,12 +2300,6 @@ Ki-67 Proliferation Index: 22%</div>
     });
     const footerAv = document.querySelector('.sidebar-footer-avatar');
     if (footerAv) applyAvatarColor(footerAv, footerAv.textContent.trim());
-
-    // Feature 9: hide tip if already dismissed
-    if (localStorage.getItem('mb360-tip-dismissed')) {
-      const tip = document.getElementById('onboarding-tip');
-      if (tip) tip.remove();
-    }
 
     // Sidebar: click anywhere on collapsed sidebar (outside buttons) to expand
     document.getElementById('sidebar').addEventListener('click', function(e) {
